@@ -1,7 +1,11 @@
 import { Router } from "express";
+import dotenv from "dotenv";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import mongoose, { Schema } from "mongoose";
 const router = Router();
+
+dotenv.config();
 
 //Create a schema for the users table
 const UserSchema = new Schema({
@@ -43,8 +47,23 @@ router.post("/register", async (req, res) => {
             password: hash,
           });
 
+          //Store user in database
           newUser.save();
-          res.status(200).send({ message: "User Registration Successful" });
+
+          console.log(newUser);
+
+          const jwt_token = jwt.sign(
+            { user_id: newUser._id, email: newUser.emailAddress },
+            process.env.JWT_SECRET,
+            {
+              expiresIn: "7d",
+            }
+          );
+          console.log(jwt_token);
+          res.status(200).send({
+            message: "User Registration Successful",
+            token: jwt_token,
+          });
         } else {
           res.status(409).send({ message: "User Already Exists" });
         }

@@ -11,6 +11,17 @@ type UserData = {
   passwordConfirmation: string;
 };
 
+function authenticate() {
+  axios
+    .get("/api/test")
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
 function isEmpty(value: string): boolean {
   if (value.trim().length <= 0) return true;
   else return false;
@@ -42,6 +53,9 @@ export default function SignupForm() {
           .post("/api/register", userData)
           .then((res) => {
             console.log(res);
+            localStorage.setItem("token", res.data.token);
+            axios.defaults.headers.common["authorization"] =
+              localStorage.getItem("token");
           })
           .catch((err) => {
             console.log(err);
