@@ -8,8 +8,7 @@ export default {
         "minim-gray-b": "#1A1A1A",
       },
       backgroundImage: {
-        "hexagon-pattern":
-          "url('./src/assets/backgrounds/hexagon-pattern.png')",
+        "hexagon-pattern": "url('src/assets/backgrounds/hexagon-pattern.png')",
       },
     },
   },
