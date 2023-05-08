@@ -1,18 +1,31 @@
 import express from "express";
 import mongoose from "mongoose";
-const app = express();
+import cors from "cors";
+import cookieSession from "cookie-session";
 import path from "path";
-app.use(express.static("dist"));
+import register from "./routes/register.js";
 
-mongoose.connect("mongodb://localhost:27017");
+// Initializing express
+const app = express();
+app.use(express.static("dist"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use("/api", register);
+
+mongoose
+  .connect("mongodb://127.0.0.1:27017/minim", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then((res) => {
+    console.log("successful connection");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
-
-app.post("/registeer", async (req, res) => {
-  try {
-  } catch (err) {}
 });
 
 app.listen(8000, () => {

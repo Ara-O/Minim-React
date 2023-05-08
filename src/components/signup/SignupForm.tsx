@@ -1,6 +1,7 @@
 import Input from "./Input";
 import { ChangeEvent, useState, FormEvent } from "react";
 import Button from "./Button";
+import axios from "axios";
 import ErrorComponent from "../error/ErrorComponent";
 
 type UserData = {
@@ -30,15 +31,22 @@ export default function SignupForm() {
 
     if (userData.password !== userData.passwordConfirmation) {
       setErrorMessage("Password and Confirmation Don't match");
-    }
-
-    if (
-      !isEmpty(userData.emailAddress) &&
-      !isEmpty(userData.password) &&
-      !isEmpty(userData.passwordConfirmation) &&
-      !isEmpty(userData.username)
-    ) {
-      console.log("email empty");
+    } else {
+      if (
+        !isEmpty(userData.emailAddress) &&
+        !isEmpty(userData.password) &&
+        !isEmpty(userData.passwordConfirmation) &&
+        !isEmpty(userData.username)
+      ) {
+        axios
+          .post("/api/register", userData)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     }
   }
 
