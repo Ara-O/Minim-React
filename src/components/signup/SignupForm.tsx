@@ -3,6 +3,7 @@ import { ChangeEvent, useState, FormEvent } from "react";
 import Button from "./Button";
 import axios from "axios";
 import ErrorComponent from "../error/ErrorComponent";
+import { useNavigate } from "react-router-dom";
 
 type UserData = {
   username: string;
@@ -11,23 +12,14 @@ type UserData = {
   passwordConfirmation: string;
 };
 
-function authenticate() {
-  axios
-    .get("/api/test")
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
-
 function isEmpty(value: string): boolean {
   if (value.trim().length <= 0) return true;
   else return false;
 }
 
 export default function SignupForm() {
+  const navigate = useNavigate();
+
   let [errorMessage, setErrorMessage] = useState("");
 
   let [userData, setUserData] = useState<UserData>({
@@ -102,8 +94,15 @@ export default function SignupForm() {
           onChange={handleChange}
           value={userData.passwordConfirmation}
         />
-        <Button title="Sign Up" onclick={createAccount}></Button>
+        <Button title="Sign Up"></Button>
       </form>
+      <h6
+        className="font-light text-[13.5px] mt-6"
+        onClick={() => navigate("/login")}
+      >
+        Already have account?{" "}
+        <span className="underline cursor-pointer"> Sign In</span>
+      </h6>
       <br />
       {errorMessage && (
         <ErrorComponent
