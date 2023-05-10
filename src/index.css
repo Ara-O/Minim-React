@@ -20,3 +20,32 @@
 .sidebar-minimized {
   margin-left: -518px;
 }
+
+.notes-area h2 {
+  font-size: 20px;
+}
+.notes-area h3 {
+  font-size: 17px;
+}
+.notes-area h4 {
+  font-size: 15px;
+}
+.notes-area p {
+  font-size: 14px;
+}
+.notes-area ul,
+.notes-area ol {
+  font-size: initial;
+  padding-left: 20px;
+}
+
+/* Remove focus outline for CKEditor */
+
+.ck,
+.ck-content,
+.ck-editor__editable .ck-rounded-corners,
+.ck-editor__editable_inline,
+.ck-blurred {
+  outline: none !important;
+  border: none !important;
+}
