@@ -35,6 +35,7 @@ export default function SignupForm() {
     if (userData.password !== userData.passwordConfirmation) {
       setErrorMessage("Password and Confirmation Don't match");
     } else {
+      //Change to required
       if (
         !isEmpty(userData.emailAddress) &&
         !isEmpty(userData.password) &&
@@ -48,10 +49,20 @@ export default function SignupForm() {
             localStorage.setItem("token", res.data.token);
             axios.defaults.headers.common["authorization"] =
               localStorage.getItem("token");
+            navigate("/home");
           })
           .catch((err) => {
+            setErrorMessage(err.message ?? err.response.data.message);
+            setTimeout(() => {
+              setErrorMessage("");
+            }, 2500);
             console.log(err);
           });
+      } else {
+        setErrorMessage("Empty fields, please try again.");
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 2500);
       }
     }
   }

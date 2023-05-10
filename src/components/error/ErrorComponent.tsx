@@ -1,3 +1,5 @@
+import cancelIcon from "../../assets/icons/cancel-icon.png";
+
 interface Props {
   message: string;
   onCancelPopup: any;
@@ -11,7 +13,7 @@ export default function ErrorComponent({ message, onCancelPopup }: Props) {
       {
         <div className="absolute bottom-12 right-12 bg-minim-gray-a px-14 py-7 pl-10 rounded-md flex items-start flex-col w-80 max-w-80 transition-all duration-500s">
           <img
-            src="../../src/assets/icons/cancel-icon.png"
+            src={cancelIcon}
             alt="Cancel icon"
             onClick={onCancelPopup}
             className="w-5 absolute right-7 cursor-pointer"
