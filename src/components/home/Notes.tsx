@@ -1,11 +1,18 @@
-const Notes = () => {
+import { Note } from "../../types/@types";
+
+interface Props {
+  note: Note;
+}
+
+const Notes = ({ note }: Props) => {
   return (
     <div className="bg-minim-gray-a w-full px-8 py-6 pb-8 box-border rounded-md">
-      <h3 className="font-medium text-sm">Physics 2100</h3>
-      <h4 className="text-xs my-2 text-gray-400">2 days ago</h4>
+      <h3 className="font-medium text-sm">{note.note_title}</h3>
+      <h4 className="text-xs my-2 text-gray-400">
+        {new Date(note.last_updated).toString().slice(0, 15)}
+      </h4>
       <h4 className="leading-6 text-[12.7px] font-light">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ducimus
-        corporis tempora maxime a amet...
+        {note.note_snippet}...
       </h4>
     </div>
   );

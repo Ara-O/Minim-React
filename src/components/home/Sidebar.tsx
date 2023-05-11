@@ -1,8 +1,13 @@
 import { useState } from "react";
 import MinimizeIcon from "../../assets/minimize-icon.png";
 import Notes from "../../components/home/Notes";
+import { Note } from "../../types/@types";
 
-const Sidebar = () => {
+interface Props {
+  allNotes: Note[];
+}
+
+const Sidebar = ({ allNotes }: Props) => {
   let [sideBarMinimized, setSideBarMinimized] = useState<boolean>(false);
   return (
     <section
@@ -32,8 +37,9 @@ const Sidebar = () => {
           />
         </span>
         <div className="mt-5 flex flex-col gap-5">
-          <Notes />
-          <Notes />
+          {allNotes.map((note) => {
+            return <Notes note={note} />;
+          })}
         </div>
       </div>
     </section>

@@ -2,6 +2,7 @@ import { Router } from "express";
 import User from "../models/users.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+
 const router = Router();
 
 router.post("/login", async (req, res) => {
@@ -24,7 +25,7 @@ router.post("/login", async (req, res) => {
       { user_id: user._id, email: user.emailAddress },
       process.env.JWT_SECRET,
       {
-        expiresIn: "7d",
+        expiresIn: "30d",
       }
     );
 

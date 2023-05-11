@@ -35,7 +35,7 @@ router.post("/register", async (req, res) => {
             { user_id: newUser._id, email: newUser.emailAddress },
             process.env.JWT_SECRET,
             {
-              expiresIn: "7d",
+              expiresIn: "30d",
             }
           );
           console.log(jwt_token);
