@@ -12,41 +12,40 @@ import { Note } from "../types/@types";
 
 export default function Home() {
   const navigate = useNavigate();
-  let [noteTitle, setNoteTitle] = useState("Physics 2100");
   let [allNotes, setAllNotes] = useState<Note[]>([]);
+
   let [noteData, setNoteData] = useState<Note>({
-    note_title: noteTitle,
+    note_title: "Physics 2100",
     note_id: generateRandomId(),
     note_snippet: "This is a note snippet. Feature incoming soon.",
-    note_data: "",
+    note_data: "<p>You can start taking notes here :D </p>",
     last_updated: Date.now(),
   });
 
   async function saveNote() {
-    console.log("saving note");
-    noteData.note_title = noteTitle;
-    console.log(noteData);
+    console.log("saving this note", noteData);
+
     try {
-      let res = await axios.post("/api/addNote", noteData);
+      await axios.post("/api/addNote", noteData);
       loadAllNotes();
-      console.log(res);
     } catch (err) {
       console.error(err);
     }
   }
 
   function handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
-    setNoteTitle(e.target.value);
+    setNoteData({ ...noteData, note_title: e.target.value });
   }
 
   async function loadAllNotes() {
     try {
       let notes = await axios.get("/api/loadAllNotes");
       setAllNotes(notes.data.notes);
-      console.log("notes", notes);
+      console.log("Loaded notes: ", notes.data.notes);
     } catch (err: any) {
       console.error(err);
       if (err.response.status === 401) {
+        //If JWT is expired, clear the token and go back to signup page
         localStorage.setItem("token", "");
         navigate("/");
       }
@@ -54,16 +53,42 @@ export default function Home() {
   }
 
   useEffect(() => {
-    // do stuff here...
-
     loadAllNotes();
   }, []);
+
+  async function editNote(note_id: string) {
+    console.log("Edited note id", note_id);
+    try {
+      let note = await axios.get("/api/retrieveNote", {
+        params: { note_id },
+      });
+
+      console.log("Retrieved note", note);
+      setNoteData({
+        note_id: note.data.note_id,
+        note_data: note.data.note_data,
+        note_snippet: note.data.note_snippet,
+        note_title: note.data.note_title,
+        last_updated: note.data.last_updated,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function deleteNote(note_id: string) {
+    console.log("deleting note from parent", note_id);
+  }
 
   return (
     <>
       <main className="bg-black h-screen flex">
         {/* LEFT SECTION */}
-        <Sidebar allNotes={allNotes} />
+        <Sidebar
+          allNotes={allNotes}
+          onEditNote={editNote}
+          onDeleteNote={deleteNote}
+        />
         {/* RIGHT SECTION */}
         <section className={` sidebar w-full flex flex-col`}>
           <div className="bg-minim-gray-b h-72 w-full box-border px-20 flex items-center justify-between">
@@ -73,12 +98,12 @@ export default function Home() {
                 <input
                   type="text"
                   onChange={handleTitleChange}
-                  value={noteTitle}
+                  value={noteData.note_title}
                   className="bg-transparent outline-none border-0 border-b-white border-b-[1px] text-2xl pb-2 font-bold "
                 />
               </span>
               <h3 className="ml-[32px] text-[12.5px] mt-3 text-[#9ca3a4]">
-                Last Updated 2/23/2022
+                Last Updated {noteData.last_updated}
               </h3>
             </div>
             <div className="flex gap-5">
@@ -96,7 +121,7 @@ export default function Home() {
           <div className="bg-black h-full overflow-auto w-full notes-area px-20 py-12">
             <CKEditor
               editor={BalloonEditor}
-              data="<p>You can start taking notes here :D </p>"
+              data={noteData.note_data}
               onReady={(editor) => {
                 // You can store the "editor" and use when it is needed.
                 console.log("Editor is ready to use!", editor);

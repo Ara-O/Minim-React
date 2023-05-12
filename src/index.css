@@ -60,6 +60,13 @@
 .ck-content::-webkit-scrollbar {
   display: none;
 }
+
+.sidebar-notes {
+  max-height: 70vh;
+}
+.sidebar-notes::-webkit-scrollbar {
+  display: none;
+}
 /* 
 .ck-content::-webkit-scrollbar {
   width: 6px;

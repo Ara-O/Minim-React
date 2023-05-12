@@ -5,6 +5,7 @@ import register from "./routes/register.js";
 import login from "./routes/login.js";
 import addnote from "./routes/addnote.js";
 import loadAllNotes from "./routes/loadAllNotes.js";
+import retrieveNote from "./routes/retrieveNote.js";
 
 // Initializing express
 const app = express();
@@ -15,6 +16,7 @@ app.use("/api", register);
 app.use("/api", login);
 app.use("/api", addnote);
 app.use("/api", loadAllNotes);
+app.use("/api", retrieveNote);
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/minim", {

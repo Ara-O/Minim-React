@@ -5,9 +5,37 @@ import { Note } from "../../types/@types";
 
 interface Props {
   allNotes: Note[];
+  onEditNote: any;
+  onDeleteNote: any;
 }
 
-const Sidebar = ({ allNotes }: Props) => {
+let mockNotes: Note[] = [
+  {
+    note_data: "",
+    note_id: "JKBoiuBUO",
+    note_snippet: "This is a snippet, pls ignore",
+    note_title: "Note title",
+    last_updated: 324322342,
+  },
+  {
+    note_data: "",
+    note_id: "JEWFjkO",
+    note_snippet: "This is a snippet, pls ignore",
+    note_title: "Note title 2",
+    last_updated: 324322342,
+  },
+];
+
+const Sidebar = ({ allNotes, onEditNote, onDeleteNote }: Props) => {
+  function editNote(note_id: string) {
+    console.log("editing note", note_id);
+    onEditNote(note_id);
+  }
+
+  function deleteNote(note_id: string) {
+    console.log("deleting note", note_id);
+    onDeleteNote(note_id);
+  }
   let [sideBarMinimized, setSideBarMinimized] = useState<boolean>(false);
   return (
     <section
@@ -24,7 +52,7 @@ const Sidebar = ({ allNotes }: Props) => {
       <div
         className={`${
           sideBarMinimized === true ? "sidebar-text-disappear" : ""
-        }`}
+        } sidebar-notes`}
       >
         <h3 className="font-medium text-[17px]">Welcome Ara</h3>
         <h4 className="mt-3 text-gray-300 font-medium text-[13px]">
@@ -38,8 +66,25 @@ const Sidebar = ({ allNotes }: Props) => {
         </span>
         <div className="mt-5 flex flex-col gap-5">
           {allNotes.map((note) => {
-            return <Notes note={note} />;
-          })}
+            return (
+              <Notes
+                note={note}
+                key={note.note_id}
+                editNote={() => editNote(note.note_id)}
+                deleteNote={() => deleteNote(note.note_id)}
+              />
+            );
+          }) ||
+            mockNotes.map((note) => {
+              return (
+                <Notes
+                  note={note}
+                  key={note.note_id}
+                  editNote={() => editNote(note.note_id)}
+                  deleteNote={() => deleteNote(note.note_id)}
+                />
+              );
+            })}
         </div>
       </div>
     </section>
