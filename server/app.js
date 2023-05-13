@@ -5,6 +5,7 @@ import register from "./routes/register.js";
 import login from "./routes/login.js";
 import addnote from "./routes/addnote.js";
 import loadAllNotes from "./routes/loadAllNotes.js";
+import deleteNote from "./routes/deleteNote.js";
 import retrieveNote from "./routes/retrieveNote.js";
 
 // Initializing express
@@ -17,6 +18,7 @@ app.use("/api", login);
 app.use("/api", addnote);
 app.use("/api", loadAllNotes);
 app.use("/api", retrieveNote);
+app.use("/api", deleteNote);
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/minim", {

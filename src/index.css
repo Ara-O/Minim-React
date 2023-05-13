@@ -62,8 +62,10 @@
 }
 
 .sidebar-notes {
-  max-height: 70vh;
+  max-height: 84vh;
+  overflow: auto;
 }
+
 .sidebar-notes::-webkit-scrollbar {
   display: none;
 }

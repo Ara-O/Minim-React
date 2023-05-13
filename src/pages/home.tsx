@@ -13,7 +13,7 @@ import { Note } from "../types/@types";
 export default function Home() {
   const navigate = useNavigate();
   let [allNotes, setAllNotes] = useState<Note[]>([]);
-
+  let [noteInformation, setNoteInformation] = useState<string>("");
   let [noteData, setNoteData] = useState<Note>({
     note_title: "Physics 2100",
     note_id: generateRandomId(),
@@ -22,18 +22,34 @@ export default function Home() {
     last_updated: Date.now(),
   });
 
+  console.log("component is being initialized", noteData);
+
   async function saveNote() {
+    noteData.note_data = noteInformation;
+    noteData.last_updated = Date.now();
     console.log("saving this note", noteData);
 
     try {
       await axios.post("/api/addNote", noteData);
-      loadAllNotes();
+      await loadAllNotes();
+      console.log("loaded notes after saving note");
     } catch (err) {
       console.error(err);
     }
   }
 
+  async function deleteNote(note_id: string) {
+    console.log("deleting note from parent", note_id);
+    try {
+      await axios.get("/api/deleteNote", { params: { note_id } });
+      await loadAllNotes();
+      console.log("loaded notes after deleting them");
+    } catch (err) {
+      console.error(err);
+    }
+  }
   function handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
+    console.log("handle title change");
     setNoteData({ ...noteData, note_title: e.target.value });
   }
 
@@ -64,6 +80,7 @@ export default function Home() {
       });
 
       console.log("Retrieved note", note);
+
       setNoteData({
         note_id: note.data.note_id,
         note_data: note.data.note_data,
@@ -71,13 +88,21 @@ export default function Home() {
         note_title: note.data.note_title,
         last_updated: note.data.last_updated,
       });
+      console.log("New note data from retrieved note data", noteData);
     } catch (err) {
       console.error(err);
     }
   }
 
-  function deleteNote(note_id: string) {
-    console.log("deleting note from parent", note_id);
+  function addNote() {
+    console.log("Adding new note ");
+    setNoteData({
+      note_title: "Add Note title",
+      note_id: generateRandomId(),
+      note_snippet: "This is a note snippet. Feature incoming soon.",
+      note_data: "<p>You can start taking notes here :D </p>",
+      last_updated: Date.now(),
+    });
   }
 
   return (
@@ -88,6 +113,7 @@ export default function Home() {
           allNotes={allNotes}
           onEditNote={editNote}
           onDeleteNote={deleteNote}
+          onAddNote={addNote}
         />
         {/* RIGHT SECTION */}
         <section className={` sidebar w-full flex flex-col`}>
@@ -143,11 +169,14 @@ export default function Home() {
                 ],
               }}
               onChange={(_, editor) => {
-                setNoteData({
-                  ...noteData,
-                  note_data: editor.getData(),
-                  last_updated: Date.now(),
-                });
+                setNoteInformation(editor.getData());
+                const plainText = editor.getData().replace(/<[^>]*>/g, "");
+                console.log(plainText);
+                // setNoteData({
+                //   ...noteData,
+                //   note_data: editor.getData(),
+                //   last_updated: Date.now(),
+                // });
               }}
               // onBlur={(_, editor) => {}}
               onFocus={(_, editor) => {

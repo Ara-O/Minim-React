@@ -6,6 +6,7 @@ import { Note } from "../../types/@types";
 interface Props {
   allNotes: Note[];
   onEditNote: any;
+  onAddNote: any;
   onDeleteNote: any;
 }
 
@@ -26,7 +27,7 @@ let mockNotes: Note[] = [
   },
 ];
 
-const Sidebar = ({ allNotes, onEditNote, onDeleteNote }: Props) => {
+const Sidebar = ({ allNotes, onEditNote, onDeleteNote, onAddNote }: Props) => {
   function editNote(note_id: string) {
     console.log("editing note", note_id);
     onEditNote(note_id);
@@ -64,7 +65,13 @@ const Sidebar = ({ allNotes, onEditNote, onDeleteNote }: Props) => {
             className="mt-5 rounded-[5px] outline-none pl-6 text-sm bg-minim-gray-a h-10 w-80"
           />
         </span>
-        <div className="mt-5 flex flex-col gap-5">
+        <h4
+          className="mt-3 text-gray-300 font-medium text-[13px] underline cursor-pointer"
+          onClick={onAddNote}
+        >
+          Add Note
+        </h4>
+        <div className="mt-5 flex flex-col gap-5 sidebar-notes">
           {allNotes.map((note) => {
             return (
               <Notes
