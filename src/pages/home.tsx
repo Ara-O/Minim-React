@@ -54,6 +54,7 @@ export default function Home() {
       await axios.get("/api/deleteNote", { params: { note_id } });
       await loadAllNotes();
       console.log("loaded notes after deleting them");
+      alert("Note deleted successfully");
     } catch (err) {
       console.error(err);
     }

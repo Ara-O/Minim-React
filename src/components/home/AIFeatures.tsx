@@ -12,7 +12,6 @@ interface Props {
 const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
   let [summarizedNote, setSummarizedNote] = useState<string>("");
   let [testQuestions, setTestQuestions] = useState([]);
-  let [error, setError] = useState<string>("");
   const parser = new DOMParser();
   const plainText = parser.parseFromString(noteInformation, "text/html")
     .documentElement.textContent;
@@ -27,8 +26,7 @@ const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
       })
       .catch((err) => {
         console.error(err);
-        setError(err.message);
-        alert(error);
+        alert(err.response.data.message);
       });
   }
 
@@ -44,12 +42,33 @@ const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
       })
       .catch((err) => {
         console.error(err);
-        setError(err.message);
-        alert(error);
+        alert(err.response.data.message);
+      });
+  }
+
+  let [ideaToVisualize, setIdeaToVisualize] = useState("");
+
+  let [ideaImage, setIdeaImage] = useState("");
+  function handleIdeaVisualizationChange(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
+    setIdeaToVisualize(e.target.value);
+  }
+
+  function generateVisualization() {
+    setIdeaImage("potato");
+    axios
+      .post("/api/generateIdeaVisualization", { ideaToVisualize })
+      .then((res) => {
+        setIdeaImage(res.data.url);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 
   useEffect(() => {
+    console.log("use effect is called");
     if (feature === "Summarize Notes") {
       generateSummary();
     }
@@ -57,7 +76,10 @@ const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
     if (feature === "Generate Test Questions") {
       generateTestQuestions();
     }
-  }, []);
+    if (feature === "Generate Idea Visualization") {
+      generateVisualization();
+    }
+  }, [feature]);
 
   return (
     <section
@@ -102,7 +124,7 @@ const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
             </h3>
             {testQuestions.length > 0 ? (
               <>
-                <h3 className="leading-7 font-light text-[13.5px] mt-3">
+                <div className="leading-7 h-[66vh] overflow-auto font-light text-[13.5px] mt-3">
                   {testQuestions.map((question: any) => {
                     return (
                       <>
@@ -111,7 +133,7 @@ const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
                           <span className="font-medium">Question:</span>{" "}
                           {question.question}
                         </h3>
-                        <h3>
+                        <h3 className="mt-1">
                           <span className="font-medium">View Answer:</span>{" "}
                           {question.answer}
                         </h3>
@@ -119,7 +141,7 @@ const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
                       </>
                     );
                   })}
-                </h3>
+                </div>
 
                 <div className="mt-6">
                   <BoxedButton onclick={generateSummary}>
@@ -131,6 +153,31 @@ const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
               <h3 className="font-light text-sm mt-3">
                 Generating test questions..
               </h3>
+            )}
+          </section>
+        )}
+
+        {feature === "Generate Idea Visualization" && (
+          <section className="mt-3 h-[83vh] test-questions-section">
+            <h3 className="mt-10 text-[15px] ">
+              Put in the idea you want to visualize:
+            </h3>
+            <input
+              type="text"
+              value={ideaToVisualize}
+              onChange={handleIdeaVisualizationChange}
+              className="mb-5 mt-5 rounded-[5px] outline-none pl-6 text-sm bg-minim-gray-a h-10 w-80"
+            />
+            <BoxedButton onclick={generateVisualization}>
+              Generate Visualization
+            </BoxedButton>
+            <br /> <br />
+            {ideaImage ? (
+              <>
+                <img src={ideaImage} alt="Idea image" className="w-72" />
+              </>
+            ) : (
+              <h3 className="text-sm font-light">Loading Image...</h3>
             )}
           </section>
         )}

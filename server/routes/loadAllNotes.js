@@ -5,7 +5,9 @@ import Note from "../models/notes.js";
 
 router.get("/loadAllNotes", verifyToken, async (req, res) => {
   try {
-    let allNotes = await Note.find({ user_id: req.user.user_id });
+    let allNotes = await Note.find({ user_id: req.user.user_id }).sort({
+      last_updated: "desc",
+    });
     console.log("All notes", allNotes);
     res.status(200).send({ notes: allNotes });
   } catch (err) {

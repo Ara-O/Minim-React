@@ -9,6 +9,7 @@ import deleteNote from "./routes/deleteNote.js";
 import retrieveNote from "./routes/retrieveNote.js";
 import summarizeNote from "./routes/summarizeNote.js";
 import generateTestQuestions from "./routes/generateTestQuestions.js";
+import generateIdeaVisualization from "./routes/generateIdeaVisualization.js";
 import { Configuration, OpenAIApi } from "openai";
 import dotenv from "dotenv";
 
@@ -25,6 +26,7 @@ app.use("/api", retrieveNote);
 app.use("/api", deleteNote);
 app.use("/api", summarizeNote);
 app.use("/api", generateTestQuestions);
+app.use("/api", generateIdeaVisualization);
 
 const configuration = new Configuration({
   apiKey: process.env.OPEN_AI_SECRET,
@@ -43,6 +45,20 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+// mongoose
+//   .connect(
+//     `mongodb+srv://ara:${process.env.MONGO_PASSWORD}@minim.4evfese.mongodb.net/?retryWrites=true&w=majority`,
+//     {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//     }
+//   )
+//   .then((res) => {
+//     console.log("successful connection");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "dist", "index.html"));
