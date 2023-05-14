@@ -7,6 +7,10 @@ import addnote from "./routes/addnote.js";
 import loadAllNotes from "./routes/loadAllNotes.js";
 import deleteNote from "./routes/deleteNote.js";
 import retrieveNote from "./routes/retrieveNote.js";
+import summarizeNote from "./routes/summarizeNote.js";
+import generateTestQuestions from "./routes/generateTestQuestions.js";
+import { Configuration, OpenAIApi } from "openai";
+import dotenv from "dotenv";
 
 // Initializing express
 const app = express();
@@ -19,6 +23,14 @@ app.use("/api", addnote);
 app.use("/api", loadAllNotes);
 app.use("/api", retrieveNote);
 app.use("/api", deleteNote);
+app.use("/api", summarizeNote);
+app.use("/api", generateTestQuestions);
+
+const configuration = new Configuration({
+  apiKey: process.env.OPEN_AI_SECRET,
+});
+
+export const openai = new OpenAIApi(configuration);
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/minim", {

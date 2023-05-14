@@ -1,5 +1,6 @@
 import { useState } from "react";
 import MinimizeIcon from "../../assets/minimize-icon.png";
+import SearchIcon from "../../assets/magnifying-glass-icon.png";
 import Notes from "../../components/home/Notes";
 import { Note } from "../../types/@types";
 
@@ -59,10 +60,15 @@ const Sidebar = ({ allNotes, onEditNote, onDeleteNote, onAddNote }: Props) => {
         <h4 className="mt-3 text-gray-300 font-medium text-[13px]">
           August 3, 2022
         </h4>
-        <span>
+        <span className="relative">
           <input
             type="text"
             className="mt-5 rounded-[5px] outline-none pl-6 text-sm bg-minim-gray-a h-10 w-80"
+          />
+          <img
+            src={SearchIcon}
+            alt="Magnifying glass icon"
+            className="w-6 absolute top-[1px] right-3 opacity-50 cursor-pointer"
           />
         </span>
         <h4
@@ -71,7 +77,7 @@ const Sidebar = ({ allNotes, onEditNote, onDeleteNote, onAddNote }: Props) => {
         >
           Add Note
         </h4>
-        <div className="mt-5 flex flex-col gap-5 sidebar-notes">
+        <div className="mt-5 flex flex-col gap-5 sidebar-notes-list">
           {allNotes.map((note) => {
             return (
               <Notes

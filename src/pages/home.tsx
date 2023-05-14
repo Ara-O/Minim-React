@@ -8,12 +8,16 @@ import generateRandomId from "../utils/generateRandomID";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Note } from "../types/@types";
+import AIFeatures from "../components/home/AIFeatures";
+import { Note, SidebarSection, AIFeature } from "../types/@types";
 
 export default function Home() {
   const navigate = useNavigate();
   let [allNotes, setAllNotes] = useState<Note[]>([]);
   let [noteInformation, setNoteInformation] = useState<string>("");
+  let [sidebarSection, setSidebarSection] = useState<SidebarSection>("Notes");
+  let [AIFeature, setAIFeature] = useState<AIFeature>("");
+
   let [noteData, setNoteData] = useState<Note>({
     note_title: "Physics 2100",
     note_id: generateRandomId(),
@@ -22,14 +26,13 @@ export default function Home() {
     last_updated: Date.now(),
   });
 
-  console.log("component is being initialized", noteData);
-
   function parseNoteInformation(noteData: string): string {
     const parser = new DOMParser();
     const plainText = parser.parseFromString(noteData, "text/html")
       .documentElement.textContent;
     return plainText || "";
   }
+
   async function saveNote() {
     noteData.note_data = noteInformation;
     noteData.note_snippet = parseNoteInformation(noteInformation.slice(0, 96));
@@ -55,6 +58,7 @@ export default function Home() {
       console.error(err);
     }
   }
+
   function handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
     console.log("handle title change");
     setNoteData({ ...noteData, note_title: e.target.value });
@@ -102,6 +106,7 @@ export default function Home() {
   }
 
   function addNote() {
+    setNoteInformation("");
     console.log("Adding new note ");
     setNoteData({
       note_title: "Add Note title",
@@ -116,12 +121,20 @@ export default function Home() {
     <>
       <main className="bg-black h-screen flex">
         {/* LEFT SECTION */}
-        <Sidebar
-          allNotes={allNotes}
-          onEditNote={editNote}
-          onDeleteNote={deleteNote}
-          onAddNote={addNote}
-        />
+        {sidebarSection === "Notes" ? (
+          <Sidebar
+            allNotes={allNotes}
+            onEditNote={editNote}
+            onDeleteNote={deleteNote}
+            onAddNote={addNote}
+          />
+        ) : (
+          <AIFeatures
+            feature={AIFeature}
+            noteInformation={noteInformation}
+            returnToNotes={() => setSidebarSection("Notes")}
+          />
+        )}
         {/* RIGHT SECTION */}
         <section className={` sidebar w-full flex flex-col`}>
           <div className="bg-minim-gray-b h-72 w-full box-border px-20 flex items-center justify-between">
@@ -141,14 +154,38 @@ export default function Home() {
             </div>
             <div className="flex gap-5">
               <Button onclick={saveNote}>Save Note</Button>
-              <Button onclick={() => console.log("e")}>
+              <Button
+                onclick={() => {
+                  setSidebarSection("AI");
+                  setAIFeature("Generate Idea Visualization");
+                }}
+              >
                 Generate idea visualization
               </Button>
-              <Button onclick={() => console.log("e")}>Speak notes</Button>
-              <Button onclick={() => console.log("e")}>
+              <Button
+                onclick={() => {
+                  setSidebarSection("AI");
+                  setAIFeature("Speak Notes");
+                }}
+              >
+                Speak notes
+              </Button>
+              <Button
+                onclick={() => {
+                  setSidebarSection("AI");
+                  setAIFeature("Generate Test Questions");
+                }}
+              >
                 Generate test questions
               </Button>
-              <Button onclick={() => console.log("e")}>Summarize notes</Button>
+              <Button
+                onclick={() => {
+                  setSidebarSection("AI");
+                  setAIFeature("Summarize Notes");
+                }}
+              >
+                Summarize notes
+              </Button>
             </div>
           </div>
           <div className="bg-black h-full overflow-auto w-full notes-area px-20 py-12">

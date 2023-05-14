@@ -32,14 +32,20 @@
 }
 .notes-area p {
   font-size: 14px;
+  font-weight: 200;
+  line-height: 27px;
 }
 .notes-area ul,
 .notes-area ol {
   font-size: initial;
   padding-left: 20px;
+  font-weight: 200;
+  line-height: 27px;
 }
 
 .notes-area li {
+  font-weight: 200;
+  line-height: 27px;
   font-size: 14px;
 }
 /* Remove focus outline for CKEditor */
@@ -61,12 +67,22 @@
   display: none;
 }
 
-.sidebar-notes {
-  max-height: 84vh;
+.sidebar-notes-list {
+  max-height: 64vh;
   overflow: auto;
 }
 
+.sidebar-notes {
+  max-height: 82vh;
+  overflow: auto;
+}
+
+.sidebar-notes-list::-webkit-scrollbar,
 .sidebar-notes::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar {
   display: none;
 }
 /* 
