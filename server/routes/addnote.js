@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { verifyToken } from "../middleware/auth.js";
 import Note from "../models/notes.js";
-import mongoose from "mongoose";
 const router = Router();
 
 router.post("/addNote", verifyToken, async (req, res) => {
@@ -19,6 +18,7 @@ router.post("/addNote", verifyToken, async (req, res) => {
         {
           last_updated: last_updated,
           note_data: note_data,
+          note_snippet: note_snippet,
           note_title: note_title,
         }
       );

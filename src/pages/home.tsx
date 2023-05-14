@@ -24,8 +24,15 @@ export default function Home() {
 
   console.log("component is being initialized", noteData);
 
+  function parseNoteInformation(noteData: string): string {
+    const parser = new DOMParser();
+    const plainText = parser.parseFromString(noteData, "text/html")
+      .documentElement.textContent;
+    return plainText || "";
+  }
   async function saveNote() {
     noteData.note_data = noteInformation;
+    noteData.note_snippet = parseNoteInformation(noteInformation.slice(0, 96));
     noteData.last_updated = Date.now();
     console.log("saving this note", noteData);
 
@@ -170,13 +177,6 @@ export default function Home() {
               }}
               onChange={(_, editor) => {
                 setNoteInformation(editor.getData());
-                const plainText = editor.getData().replace(/<[^>]*>/g, "");
-                console.log(plainText);
-                // setNoteData({
-                //   ...noteData,
-                //   note_data: editor.getData(),
-                //   last_updated: Date.now(),
-                // });
               }}
               // onBlur={(_, editor) => {}}
               onFocus={(_, editor) => {
