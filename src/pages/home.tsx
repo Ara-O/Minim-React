@@ -37,23 +37,19 @@ export default function Home() {
     noteData.note_data = noteInformation;
     noteData.note_snippet = parseNoteInformation(noteInformation.slice(0, 96));
     noteData.last_updated = Date.now();
-    console.log("saving this note", noteData);
 
     try {
       await axios.post("/api/addNote", noteData);
       await loadAllNotes();
-      console.log("loaded notes after saving note");
     } catch (err) {
       console.error(err);
     }
   }
 
   async function deleteNote(note_id: string) {
-    console.log("deleting note from parent", note_id);
     try {
       await axios.get("/api/deleteNote", { params: { note_id } });
       await loadAllNotes();
-      console.log("loaded notes after deleting them");
       alert("Note deleted successfully");
     } catch (err) {
       console.error(err);
@@ -61,7 +57,6 @@ export default function Home() {
   }
 
   function handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
-    console.log("handle title change");
     setNoteData({ ...noteData, note_title: e.target.value });
   }
 
@@ -69,7 +64,6 @@ export default function Home() {
     try {
       let notes = await axios.get("/api/loadAllNotes");
       setAllNotes(notes.data.notes);
-      console.log("Loaded notes: ", notes.data.notes);
     } catch (err: any) {
       console.error(err);
       if (err.response.status === 401) {
@@ -85,13 +79,10 @@ export default function Home() {
   }, []);
 
   async function editNote(note_id: string) {
-    console.log("Edited note id", note_id);
     try {
       let note = await axios.get("/api/retrieveNote", {
         params: { note_id },
       });
-
-      console.log("Retrieved note", note);
 
       setNoteData({
         note_id: note.data.note_id,
@@ -100,7 +91,6 @@ export default function Home() {
         note_title: note.data.note_title,
         last_updated: note.data.last_updated,
       });
-      console.log("New note data from retrieved note data", noteData);
     } catch (err) {
       console.error(err);
     }
@@ -108,7 +98,6 @@ export default function Home() {
 
   function addNote() {
     setNoteInformation("");
-    console.log("Adding new note ");
     setNoteData({
       note_title: "Add Note title",
       note_id: generateRandomId(),
@@ -163,14 +152,14 @@ export default function Home() {
               >
                 Generate idea visualization
               </Button>
-              <Button
+              {/* <Button
                 onclick={() => {
                   setSidebarSection("AI");
                   setAIFeature("Speak Notes");
                 }}
               >
                 Speak notes
-              </Button>
+              </Button> */}
               <Button
                 onclick={() => {
                   setSidebarSection("AI");

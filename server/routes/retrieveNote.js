@@ -4,9 +4,7 @@ import Note from "../models/notes.js";
 const router = Router();
 
 router.get("/retrieveNote", verifyToken, async (req, res) => {
-  console.log(req.query);
   const note_id = req.query.note_id;
-  console.log(req.user);
   try {
     let retrievedNote = await Note.findOne({
       note_id: note_id,

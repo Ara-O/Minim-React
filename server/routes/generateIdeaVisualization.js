@@ -11,9 +11,9 @@ router.post("/generateIdeaVisualization", async (req, res) => {
       n: 4,
       size: "1024x1024",
     });
-    const image_url = response.data.data[0].url;
+    const image_urls = response.data.data;
     console.log(response.data.data);
-    res.status(200).send({ url: image_url });
+    res.status(200).send({ urls: image_urls });
   } catch (err) {
     console.log(err);
     res.status(400).send({ message: err.message });

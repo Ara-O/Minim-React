@@ -5,8 +5,8 @@ const router = Router();
 
 router.post("/addNote", verifyToken, async (req, res) => {
   let { note_id, note_data, last_updated, note_title, note_snippet } = req.body;
-  console.log(req.body);
-  console.log(req.user);
+  // console.log(req.body);
+  // console.log(req.user);
 
   let existingNote = await Note.findOne({ note_id: note_id });
 
