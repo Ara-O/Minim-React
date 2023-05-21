@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import path from "path";
+import cors from "cors";
 import register from "./routes/register.js";
 import login from "./routes/login.js";
 import addnote from "./routes/addnote.js";
@@ -15,6 +15,7 @@ import dotenv from "dotenv";
 
 // Initializing express
 const app = express();
+app.use(cors());
 app.use(express.static("dist"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
