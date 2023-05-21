@@ -29,7 +29,7 @@ export default function LoginForm() {
 
     if (!isEmpty(userData.emailAddress) && !isEmpty(userData.password)) {
       axios
-        .post("/api/login", userData)
+        .post("https://minim-km35.onrender.com/api/login", userData)
         .then((res) => {
           console.log(res);
           localStorage.setItem("token", res.data.token);

@@ -39,7 +39,7 @@ export default function Home() {
     noteData.last_updated = Date.now();
 
     try {
-      await axios.post("/api/addNote", noteData);
+      await axios.post("https://minim-km35.onrender.com/api/addNote", noteData);
       await loadAllNotes();
     } catch (err) {
       console.error(err);
@@ -48,7 +48,9 @@ export default function Home() {
 
   async function deleteNote(note_id: string) {
     try {
-      await axios.get("/api/deleteNote", { params: { note_id } });
+      await axios.get("https://minim-km35.onrender.com/api/deleteNote", {
+        params: { note_id },
+      });
       await loadAllNotes();
       alert("Note deleted successfully");
     } catch (err) {
@@ -62,7 +64,9 @@ export default function Home() {
 
   async function loadAllNotes() {
     try {
-      let notes = await axios.get("/api/loadAllNotes");
+      let notes = await axios.get(
+        "https://minim-km35.onrender.com/api/loadAllNotes"
+      );
       setAllNotes(notes.data.notes);
     } catch (err: any) {
       console.error(err);
@@ -80,9 +84,12 @@ export default function Home() {
 
   async function editNote(note_id: string) {
     try {
-      let note = await axios.get("/api/retrieveNote", {
-        params: { note_id },
-      });
+      let note = await axios.get(
+        "https://minim-km35.onrender.com/api/retrieveNote",
+        {
+          params: { note_id },
+        }
+      );
 
       setNoteData({
         note_id: note.data.note_id,

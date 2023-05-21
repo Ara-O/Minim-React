@@ -19,7 +19,9 @@ const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
   function generateSummary() {
     setSummarizedNote("");
     axios
-      .post("/api/summarizeNote", { noteData: plainText })
+      .post("https://minim-km35.onrender.com/api/summarizeNote", {
+        noteData: plainText,
+      })
       .then((res) => {
         console.log(res.data);
         setSummarizedNote(res.data.summary);
@@ -33,7 +35,9 @@ const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
   function generateTestQuestions() {
     setTestQuestions("");
     axios
-      .post("/api/generateTestQuestions", { noteData: plainText })
+      .post("https://minim-km35.onrender.com/api/generateTestQuestions", {
+        noteData: plainText,
+      })
       .then((res) => {
         setTestQuestions(res.data.testQuestions);
       })
@@ -55,7 +59,9 @@ const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
   function generateVisualization() {
     setLoadingMessage("Loading images...");
     axios
-      .post("/api/generateIdeaVisualization", { ideaToVisualize })
+      .post("https://minim-km35.onrender.com/api/generateIdeaVisualization", {
+        ideaToVisualize,
+      })
       .then((res) => {
         setIdeaImage(res.data.urls);
       })

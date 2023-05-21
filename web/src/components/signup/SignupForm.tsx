@@ -43,7 +43,7 @@ export default function SignupForm() {
         !isEmpty(userData.username)
       ) {
         axios
-          .post("/api/register", userData)
+          .post("https://minim-km35.onrender.com/api/register", userData)
           .then((res) => {
             console.log(res);
             localStorage.setItem("token", res.data.token);
