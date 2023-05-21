@@ -35,7 +35,7 @@ const configuration = new Configuration({
 export const openai = new OpenAIApi(configuration);
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/minim", {
+  .connect(process.env.MONGO_CONNECTION_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
