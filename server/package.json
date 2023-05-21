@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "@types/react": "^18.2.6"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "openai": "^3.2.1"
+  }
+}
