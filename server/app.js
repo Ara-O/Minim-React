@@ -29,6 +29,10 @@ app.use("/api", summarizeNote);
 app.use("/api", generateTestQuestions);
 app.use("/api", generateIdeaVisualization);
 
+app.get("/api/health", (req, res) => {
+  res.status(200).send("Server working");
+});
+
 const configuration = new Configuration({
   apiKey: process.env.OPEN_AI_SECRET,
 });
