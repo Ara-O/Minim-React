@@ -2,7 +2,6 @@ import Input from "./Input";
 import { ChangeEvent, useState, FormEvent } from "react";
 import Button from "./Button";
 import axios from "axios";
-import ErrorComponent from "../error/ErrorComponent";
 import { useNavigate } from "react-router-dom";
 
 type UserData = {
@@ -12,21 +11,16 @@ type UserData = {
   passwordConfirmation: string;
 };
 
-function isEmpty(value: string): boolean {
-  if (value.trim().length <= 0) return true;
-  else return false;
-}
-
 export default function SignupForm() {
   const navigate = useNavigate();
 
-  let [errorMessage, setErrorMessage] = useState("");
-
-  let [userData, setUserData] = useState<UserData>({
-    username: "",
-    emailAddress: "",
-    password: "",
-    passwordConfirmation: "",
+  const [errorMessage, setErrorMessage] = useState("");
+  const [progressMessage, setProgressMessage ] = useState("");
+  const [userData, setUserData] = useState<UserData>({
+    username: "Ara",
+    emailAddress: "test@gmail.com",
+    password: "test",
+    passwordConfirmation: "test",
   });
 
   function createAccount(e: FormEvent<HTMLFormElement>) {
@@ -35,35 +29,24 @@ export default function SignupForm() {
     if (userData.password !== userData.passwordConfirmation) {
       setErrorMessage("Password and Confirmation Don't match");
     } else {
-      //Change to required
-      if (
-        !isEmpty(userData.emailAddress) &&
-        !isEmpty(userData.password) &&
-        !isEmpty(userData.passwordConfirmation) &&
-        !isEmpty(userData.username)
-      ) {
+      setProgressMessage("Registering...")
         axios
-          .post("https://minim-km35.onrender.com/api/register", userData)
+          .post("http://localhost:8080/api/register", userData)
           .then((res) => {
             console.log(res);
-            localStorage.setItem("token", res.data.token);
-            axios.defaults.headers.common["authorization"] =
-              localStorage.getItem("token");
-            navigate("/home");
+            // localStorage.setItem("token", res.data.token);
+            // axios.defaults.headers.common["authorization"] =
+            //   localStorage.getItem("token");
+            // navigate("/home");
           })
           .catch((err) => {
-            setErrorMessage(err.message ?? err.response.data.message);
-            setTimeout(() => {
-              setErrorMessage("");
-            }, 2500);
+            // setErrorMessage(err.message ?? err.response.data.message);
+            // setTimeout(() => {
+            //   setErrorMessage("");
+            // }, 2500);
             console.log(err);
           });
-      } else {
-        setErrorMessage("Empty fields, please try again.");
-        setTimeout(() => {
-          setErrorMessage("");
-        }, 2500);
-      }
+ 
     }
   }
 
@@ -115,12 +98,8 @@ export default function SignupForm() {
         <span className="underline cursor-pointer"> Sign In</span>
       </h6>
       <br />
-      {errorMessage && (
-        <ErrorComponent
-          message={errorMessage}
-          onCancelPopup={() => setErrorMessage("")}
-        />
-      )}
+      <h6 className="font-light text-red-400 text-sm">{errorMessage}</h6>
+      <h6 className="font-light text-white-400 text-sm">{progressMessage}</h6>
     </>
   );
 }

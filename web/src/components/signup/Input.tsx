@@ -18,6 +18,7 @@ export default function Input({ type, label, value, name, onChange }: Props) {
           type={type}
           onChange={onChange}
           name={name}
+          required
           className="outline-none shadow-lg bg-minim-gray-a pl-6 text-sm font-light rounded-sm h-11 w-60"
         />
       </div>

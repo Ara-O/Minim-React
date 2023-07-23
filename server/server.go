@@ -20,8 +20,8 @@ func (s *Server) newServer(listenAddr string) *Server {
 
 func (s *Server) start() error {
 	http.HandleFunc("/health", health)
+	http.HandleFunc("/api/register", register)
 
-	
 	fmt.Println("Server started on", s.listenAddr)
 	err := http.ListenAndServe(s.listenAddr, nil)
 
