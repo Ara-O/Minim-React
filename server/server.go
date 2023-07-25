@@ -8,6 +8,7 @@ import (
 
 type Server struct {
 	listenAddr string
+	database   DatabaseInterface
 }
 
 func (s *Server) newServer(listenAddr string) *Server {
@@ -19,6 +20,9 @@ func (s *Server) newServer(listenAddr string) *Server {
 }
 
 func (s *Server) start() error {
+	// Starting database
+	s.database.start()
+
 	http.HandleFunc("/health", health)
 	http.HandleFunc("/api/register", register)
 
@@ -29,7 +33,7 @@ func (s *Server) start() error {
 		log.Fatal("There was an error starting a server")
 		return err
 	}
-	
+
 	return nil
 }
 
