@@ -15,7 +15,7 @@ export default function SignupForm() {
   const navigate = useNavigate();
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [progressMessage, setProgressMessage ] = useState("");
+  const [progressMessage, setProgressMessage] = useState("");
   const [userData, setUserData] = useState<UserData>({
     username: "Ara",
     emailAddress: "test@gmail.com",
@@ -29,24 +29,27 @@ export default function SignupForm() {
     if (userData.password !== userData.passwordConfirmation) {
       setErrorMessage("Password and Confirmation Don't match");
     } else {
+      setErrorMessage("")
       setProgressMessage("Registering...")
-        axios
-          .post("http://localhost:8080/api/register", userData)
-          .then((res) => {
-            console.log(res);
-            // localStorage.setItem("token", res.data.token);
-            // axios.defaults.headers.common["authorization"] =
-            //   localStorage.getItem("token");
-            // navigate("/home");
-          })
-          .catch((err) => {
-            // setErrorMessage(err.message ?? err.response.data.message);
-            // setTimeout(() => {
-            //   setErrorMessage("");
-            // }, 2500);
-            console.log(err);
-          });
- 
+      axios
+        .post("http://localhost:8080/api/register", userData)
+        .then((res) => {
+          console.log(res);
+          // localStorage.setItem("token", res.data.token);
+          // axios.defaults.headers.common["authorization"] =
+          //   localStorage.getItem("token");
+          // navigate("/home");
+        })
+        .catch((err) => {
+          // setErrorMessage(err.message ?? err.response.data.message);
+          // setTimeout(() => {
+          //   setErrorMessage("");
+          // }, 2500);
+          setProgressMessage("")
+          setErrorMessage(err.response.data);
+
+        });
+
     }
   }
 

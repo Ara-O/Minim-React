@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -21,16 +20,20 @@ func (s *Server) newServer(listenAddr string) *Server {
 
 func (s *Server) start() error {
 	// Starting database
-	s.database.start()
-
-	http.HandleFunc("/health", health)
-	http.HandleFunc("/api/register", register)
-
-	fmt.Println("Server started on", s.listenAddr)
-	err := http.ListenAndServe(s.listenAddr, nil)
+	err := s.database.start()
 
 	if err != nil {
-		log.Fatal("There was an error starting a server")
+		return err
+	}
+
+	//Routes
+	http.HandleFunc("/health", health)
+	http.HandleFunc("/api/register", s.database.register)
+
+	fmt.Println("Server started on", s.listenAddr)
+	err = http.ListenAndServe(s.listenAddr, nil)
+
+	if err != nil {
 		return err
 	}
 
