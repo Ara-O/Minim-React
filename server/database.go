@@ -2,21 +2,18 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
-	"strings"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type DatabaseInterface interface {
 	start() error
 	end()
 	register(http.ResponseWriter, *http.Request)
+	login(http.ResponseWriter, *http.Request)
 }
 
 type Database struct {
@@ -63,53 +60,6 @@ func (d *Database) start() error {
 	}
 
 	return nil
-}
-
-// Register function
-func (d *Database) register(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "*")
-
-	if r.Method != "POST" {
-		return
-	}
-
-	//Decode user data
-	var user User
-	decoder := json.NewDecoder(r.Body)
-	decoder.Decode(&user)
-
-	// Sanitize user data
-	user.Username = strings.Trim(user.Username, " ")
-	user.EmailAddress = strings.Trim(user.EmailAddress, " ")
-	user.Password = strings.Trim(user.Password, " ")
-	
-	// Validating non-empty fields
-	if user.Username  == "" || user.EmailAddress == "" || user.Password == "" {
-		w.WriteHeader(422)
-		fmt.Fprintf(w, "Information is missing, please try again")
-	}
-
-	stmt, err := d.db.Prepare("INSERT INTO User(username, email, password) VALUES(?, ?, ?)")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Hashing password
-	pw_hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	//Insert into table
-	stmt.QueryRow(user.Username, user.EmailAddress, pw_hash)
-	stmt.Close()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
 }
 
 func (d *Database) end() {
