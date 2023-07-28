@@ -29,6 +29,7 @@ func (s *Server) start() error {
 	//Routes
 	http.HandleFunc("/health", health)
 	http.HandleFunc("/api/register", s.database.register)
+	http.HandleFunc("/api/login", s.database.login)
 
 	fmt.Println("Server started on", s.listenAddr)
 	err = http.ListenAndServe(s.listenAddr, nil)

@@ -10,15 +10,11 @@ type UserData = {
   password: string;
 };
 
-function isEmpty(value: string): boolean {
-  if (value.trim().length <= 0) return true;
-  else return false;
-}
 
 export default function LoginForm() {
   const navigate = useNavigate();
-  let [popupMessage, setPopupMessage] = useState("");
-
+  let [errorMessage, setErrorMessage] = useState<string>("")
+  let [progressMessage, setProgressMessage] = useState<string>("")
   let [userData, setUserData] = useState<UserData>({
     emailAddress: "",
     password: "",
@@ -27,20 +23,18 @@ export default function LoginForm() {
   function logIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (!isEmpty(userData.emailAddress) && !isEmpty(userData.password)) {
-      axios
-        .post("https://minim-km35.onrender.com/api/login", userData)
-        .then((res) => {
-          console.log(res);
-          localStorage.setItem("token", res.data.token);
-          axios.defaults.headers.common["authorization"] =
-            localStorage.getItem("token");
-          navigate("/home");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    axios
+      .post("http://localhost:8080/api/login", userData)
+      .then((res) => {
+        console.log(res);
+        // localStorage.setItem("token", res.data.token);
+        // axios.defaults.headers.common["authorization"] =
+        //   localStorage.getItem("token");
+        // navigate("/home");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -78,12 +72,8 @@ export default function LoginForm() {
         <span className="underline cursor-pointer">Sign Up</span>
       </h6>
       <br />
-      {popupMessage && (
-        <PopupComponent
-          message={popupMessage}
-          onCancelPopup={() => setPopupMessage("")}
-        />
-      )}
+      <h6 className="font-light text-red-400 text-sm">{errorMessage}</h6>
+      <h6 className="font-light text-white-400 text-sm">{progressMessage}</h6>
     </>
   );
 }

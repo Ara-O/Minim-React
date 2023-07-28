@@ -6,8 +6,10 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/Ara-O/Minim-React/models"
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -49,10 +51,53 @@ func (d *Database) register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Insert into table
-	stmt.QueryRow(user.Username, user.EmailAddress, pw_hash)
-	stmt.Close()
-
+	result, err := stmt.Exec(user.Username, user.EmailAddress, pw_hash)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	userId, err := result.LastInsertId()
+	stmt.Close()
+
+	//Creating token
+	token := jwt.New(jwt.SigningMethodHS256)
+	claims := token.Claims.(jwt.MapClaims)
+	claims["exp"] = time.Now().Add(10000 * time.Minute)
+	claims["userId"] = userId
+
+	tokenString, err := token.SignedString([]byte("test"))
+
+	if err != nil {
+		log.Fatal("e", err)
+	}
+
+
+	fmt.Fprintf(w, tokenString)
+	// Parse the token without verifying the signature
+	// decodedToken, _, err := new(jwt.Parser).ParseUnverified(tokenString, jwt.MapClaims{})
+	// if err != nil {
+	// 	log.Fatal("Error parsing token:", err)
+	// 	return
+	// }
+
+	// // Access the claims data
+	// claims, ok := decodedToken.Claims.(jwt.MapClaims)
+	// if !ok {
+	// 	log.Fatal("Error accessing claims")
+	// 	return
+	// }
+
+	// // Extract the data from the claims
+	// userID, ok := claims["userId"].(float64)
+	// if !ok {
+	// 	log.Fatal("Error extracting user ID")
+	// 	return
+	// }
+
+	// // Do something with the extracted data
+	// fmt.Println("User ID:", userID)
+
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 }
