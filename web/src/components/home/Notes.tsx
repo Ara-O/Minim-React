@@ -1,4 +1,4 @@
-import { Note } from "../../types/@types";
+import { Note } from "../../types/types";
 import PencilIcon from "../../assets/pencil-icon.png";
 import TrashIcon from "../../assets/trash-icon.png";
 interface Props {

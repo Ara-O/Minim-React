@@ -1,6 +1,6 @@
 import GoBackIcon from "../../assets/go-back-icon.png";
 import { useEffect, useState } from "react";
-import { AIFeature } from "../../types/@types";
+import { AIFeature } from "../../types/types";
 import axios from "axios";
 import BoxedButton from "./BoxedButton";
 

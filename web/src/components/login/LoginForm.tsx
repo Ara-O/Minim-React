@@ -15,8 +15,8 @@ export default function LoginForm() {
   let [errorMessage, setErrorMessage] = useState<string>("")
   let [progressMessage, setProgressMessage] = useState<string>("")
   let [userData, setUserData] = useState<UserData>({
-    email: "",
-    password: "",
+    email: "test@gmail.com",
+    password: "test",
   });
 
   function logIn(e: FormEvent<HTMLFormElement>) {
@@ -26,14 +26,13 @@ export default function LoginForm() {
     axios
       .post("http://localhost:8080/api/login", userData)
       .then((res) => {
-        console.log(res);
-        // localStorage.setItem("token", res.data.token);
-        // axios.defaults.headers.common["authorization"] =
-        //   localStorage.getItem("token");
-        // navigate("/home");
+        console.log(res)
+        localStorage.setItem("token", res.data);
+        axios.defaults.headers.common["authorization"] =
+          localStorage.getItem("token");
+        navigate("/home");
       })
       .catch((err) => {
-        console.log(err.response);
         setProgressMessage("")
         setErrorMessage(err.response.data)
       });

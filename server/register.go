@@ -43,6 +43,7 @@ func (d *Database) register(w http.ResponseWriter, r *http.Request) {
 	if user.Username == "" || user.EmailAddress == "" || user.Password == "" {
 		w.WriteHeader(422)
 		fmt.Fprintf(w, "Information is missing, please try again")
+		return
 	}
 
 	var existingUser models.RegisteredUserData

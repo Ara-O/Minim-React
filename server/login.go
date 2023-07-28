@@ -70,8 +70,6 @@ func (d *Database) login(w http.ResponseWriter, r *http.Request) {
 
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 
-	fmt.Println(tokenString)
-
 	w.WriteHeader(200)
-	fmt.Fprint(w, "Logged in successfully")
+	fmt.Fprint(w, tokenString)
 }

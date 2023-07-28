@@ -2,7 +2,7 @@ import { useState } from "react";
 import MinimizeIcon from "../../assets/minimize-icon.png";
 import SearchIcon from "../../assets/magnifying-glass-icon.png";
 import Notes from "../../components/home/Notes";
-import { Note } from "../../types/@types";
+import { Note } from "../../types/types";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
