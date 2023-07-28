@@ -38,12 +38,12 @@ export default function SignupForm() {
           localStorage.setItem("token", res.data);
           axios.defaults.headers.common["authorization"] =
             localStorage.getItem("token");
-          // navigate("/home");
+          navigate("/home");
         })
         .catch((err) => {
+          console.log(err.response)
           setProgressMessage("")
           setErrorMessage(err.response.data);
-
         });
 
     }

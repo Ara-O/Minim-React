@@ -2,11 +2,10 @@ import Input from "./Input";
 import { ChangeEvent, useState, FormEvent } from "react";
 import Button from "./Button";
 import { useNavigate } from "react-router-dom";
-import PopupComponent from "../error/ErrorComponent";
 import axios from "axios";
 
 type UserData = {
-  emailAddress: string;
+  email: string;
   password: string;
 };
 
@@ -16,13 +15,14 @@ export default function LoginForm() {
   let [errorMessage, setErrorMessage] = useState<string>("")
   let [progressMessage, setProgressMessage] = useState<string>("")
   let [userData, setUserData] = useState<UserData>({
-    emailAddress: "",
+    email: "",
     password: "",
   });
 
   function logIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
+    setProgressMessage("Logging in...")
+    setErrorMessage("")
     axios
       .post("http://localhost:8080/api/login", userData)
       .then((res) => {
@@ -33,7 +33,9 @@ export default function LoginForm() {
         // navigate("/home");
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response);
+        setProgressMessage("")
+        setErrorMessage(err.response.data)
       });
   }
 
@@ -47,20 +49,23 @@ export default function LoginForm() {
         onSubmit={logIn}
         className="mt-10 flex w-auto items-center max-w-[35rem] gap-7 flex-wrap justify-center gap-x-11"
       >
-        <Input
-          name="emailAddress"
-          label="Email Address"
-          type="email"
-          onChange={handleChange}
-          value={userData.emailAddress}
-        />
-        <Input
-          label="Password"
-          type="password"
-          name="password"
-          onChange={handleChange}
-          value={userData.password}
-        />
+        <div className="flex gap-12 flex-wrap items-center justify-center">
+
+          <Input
+            name="email"
+            label="Email Address"
+            type="email"
+            onChange={handleChange}
+            value={userData.email}
+          />
+          <Input
+            label="Password"
+            type="password"
+            name="password"
+            onChange={handleChange}
+            value={userData.password}
+          />
+        </div>
 
         <Button title="Log In"></Button>
       </form>

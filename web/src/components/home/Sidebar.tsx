@@ -3,6 +3,7 @@ import MinimizeIcon from "../../assets/minimize-icon.png";
 import SearchIcon from "../../assets/magnifying-glass-icon.png";
 import Notes from "../../components/home/Notes";
 import { Note } from "../../types/@types";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   allNotes: Note[];
@@ -29,9 +30,15 @@ let mockNotes: Note[] = [
 ];
 
 const Sidebar = ({ allNotes, onEditNote, onDeleteNote, onAddNote }: Props) => {
+  const navigate = useNavigate()
   function editNote(note_id: string) {
     console.log("editing note", note_id);
     onEditNote(note_id);
+  }
+
+  function logOut() {
+    localStorage.setItem("token", "")
+    navigate("/")
   }
 
   function deleteNote(note_id: string) {
@@ -41,9 +48,8 @@ const Sidebar = ({ allNotes, onEditNote, onDeleteNote, onAddNote }: Props) => {
   let [sideBarMinimized, setSideBarMinimized] = useState<boolean>(false);
   return (
     <section
-      className={`${
-        sideBarMinimized === true ? "sidebar-slide sidebar-minimized" : ""
-      } sidebar relative w-[600px] patterned-bg bg-black h-screen px-14 py-20`}
+      className={`${sideBarMinimized === true ? "sidebar-slide sidebar-minimized" : ""
+        } sidebar relative w-[600px] patterned-bg bg-black h-screen px-14 py-20`}
     >
       <img
         src={MinimizeIcon}
@@ -52,9 +58,8 @@ const Sidebar = ({ allNotes, onEditNote, onDeleteNote, onAddNote }: Props) => {
         className="absolute top-10 right-6 cursor-pointer w-[17px]"
       />
       <div
-        className={`${
-          sideBarMinimized === true ? "sidebar-text-disappear" : ""
-        } sidebar-notes`}
+        className={`${sideBarMinimized === true ? "sidebar-text-disappear" : ""
+          } sidebar-notes`}
       >
         <h3 className="font-medium text-[17px]">Welcome Ara</h3>
         <h4 className="mt-3 text-gray-300 font-medium text-[13px]">
@@ -99,6 +104,7 @@ const Sidebar = ({ allNotes, onEditNote, onDeleteNote, onAddNote }: Props) => {
               );
             })}
         </div>
+        <h3 onClick={logOut} className="absolute cursor-pointer text-sm bottom-10 hover:underline font-light">Log Out</h3>
       </div>
     </section>
   );

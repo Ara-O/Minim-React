@@ -5,18 +5,25 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
 	"github.com/Ara-O/Minim-React/models"
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt"
+	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 )
 
 // Register function
 func (d *Database) register(w http.ResponseWriter, r *http.Request) {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*, Authorization")
 
 	if r.Method != "POST" {
 		return
@@ -38,39 +45,46 @@ func (d *Database) register(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Information is missing, please try again")
 	}
 
-	stmt, err := d.db.Prepare("INSERT INTO User(username, email, password) VALUES(?, ?, ?)")
-
-	if err != nil {
-		log.Fatal(err)
+	var existingUser models.RegisteredUserData
+	//Check if user already exists
+	row := d.db.QueryRow("SELECT * FROM User WHERE email = ?", user.EmailAddress)
+	if err := row.Scan(&existingUser.Id, &existingUser.Username, &existingUser.Email, &existingUser.Password); err == nil {
+		w.WriteHeader(409)
+		fmt.Println("A user already exists")
+		fmt.Fprintf(w, "A user with this email address already exists")
+		return
 	}
 
 	// Hashing password
 	pw_hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//Insert into table
+	stmt, err := d.db.Prepare("INSERT INTO User(username, email, password) VALUES(?, ?, ?)")
 	result, err := stmt.Exec(user.Username, user.EmailAddress, pw_hash)
+
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer stmt.Close()
 
 	userId, err := result.LastInsertId()
-	stmt.Close()
 
 	//Creating token
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(10000 * time.Minute)
+	claims["exp"] = time.Now().Add(900000 * time.Minute)
 	claims["userId"] = userId
 
-	tokenString, err := token.SignedString([]byte("test"))
+	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 
 	if err != nil {
 		log.Fatal("e", err)
 	}
 
+	//Sending the token sring
 
 	fmt.Fprintf(w, tokenString)
 	// Parse the token without verifying the signature

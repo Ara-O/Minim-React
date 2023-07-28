@@ -6,3 +6,10 @@ type User struct {
 	Password             string `json:"password"`
 	PasswordConfirmation string `json:"passwordConfirmation"`
 }
+
+type RegisteredUserData struct {
+	Id       int    `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
