@@ -30,7 +30,7 @@ func (s *Server) start() error {
 	http.HandleFunc("/health", health)
 	http.HandleFunc("/api/register", s.database.register)
 	http.HandleFunc("/api/login", s.database.login)
-
+	http.HandleFunc("/api/saveNote", s.database.saveNote)
 	fmt.Println("Server started on", s.listenAddr)
 	err = http.ListenAndServe(s.listenAddr, nil)
 

@@ -1,39 +1,33 @@
-import Sidebar from "../components/home/Sidebar";
-import { ChangeEvent, useState } from "react";
-import generateRandomId from "../utils/generateRandomID";
+import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Note, SidebarSection, AIFeature } from "../types/types";
+import Sidebar from "../components/home/Sidebar";
+import generateRandomId from "../utils/generateRandomID";
 import axios from "axios";
 import AIFeatures from "../components/home/AIFeatures";
 import MainSection from "../components/home/MainSection"
-import { Note, SidebarSection, AIFeature } from "../types/types";
+import parseNoteInformation from "../utils/parseNoteInformation";
 
 export default function Home() {
   const navigate = useNavigate();
+
+  //Variables
   let [allNotes, setAllNotes] = useState<Note[]>([]);
   let [noteInformation, setNoteInformation] = useState<string>("");
   let [sidebarSection, setSidebarSection] = useState<SidebarSection>("Notes");
   let [AIFeature, setAIFeature] = useState<AIFeature>("");
-
   let [noteData, setNoteData] = useState<Note>({
-    note_title: "Physics 2100",
+    note_title: "Note Title",
     note_id: generateRandomId(),
-    note_snippet: "This is a note snippet. Feature incoming soon.",
+    note_snippet: "This is a note snippet.",
     note_data: "<p>You can start taking notes here :D </p>",
     last_updated: Date.now(),
   });
 
-  function parseNoteInformation(noteData: string): string {
-    const parser = new DOMParser();
-    const plainText = parser.parseFromString(noteData, "text/html")
-      .documentElement.textContent;
-    return plainText || "";
-  }
-
-
   async function deleteNote(note_id: string) {
     try {
-      await axios.get("https://minim-km35.onrender.com/api/deleteNote", {
+      await axios.get("http://localhost:8080/api/deleteNote", {
         params: { note_id },
       });
       await loadAllNotes();
@@ -43,14 +37,11 @@ export default function Home() {
     }
   }
 
-  function handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
-    setNoteData({ ...noteData, note_title: e.target.value });
-  }
 
   async function loadAllNotes() {
     try {
       let notes = await axios.get(
-        "https://minim-km35.onrender.com/api/loadAllNotes"
+        "http://localhost:8080/api/loadAllNotes"
       );
       setAllNotes(notes.data.notes);
     } catch (err: any) {
@@ -59,18 +50,26 @@ export default function Home() {
         //If JWT is expired, clear the token and go back to signup page
         localStorage.setItem("token", "");
         navigate("/");
+      } else {
+        alert(err)
       }
     }
   }
 
-  useEffect(() => {
-    loadAllNotes();
-  }, []);
+  async function saveNote() {
+    setNoteData({ ...noteData, note_data: noteInformation, last_updated: Date.now(), note_snippet: parseNoteInformation(noteInformation.slice(0, 96)) })
+    try {
+      await axios.post("http://localhost:8080/api/saveNote", noteData);
+      await loadAllNotes();
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   async function editNote(note_id: string) {
     try {
       let note = await axios.get(
-        "https://minim-km35.onrender.com/api/retrieveNote",
+        "http://localhost:8080/api/retrieveNote",
         {
           params: { note_id },
         }
@@ -91,13 +90,18 @@ export default function Home() {
   function addNote() {
     setNoteInformation("");
     setNoteData({
-      note_title: "Add Note title",
+      note_title: "Note title",
       note_id: generateRandomId(),
       note_snippet: "This is a note snippet. Feature incoming soon.",
       note_data: "<p>You can start taking notes here :D </p>",
       last_updated: Date.now(),
     });
   }
+
+  useEffect(() => {
+    loadAllNotes();
+  }, []);
+
 
   return (
     <>
@@ -118,7 +122,7 @@ export default function Home() {
           />
         )}
         {/* RIGHT SECTION */}
-        <MainSection noteData={noteData} setSidebarSection={setSidebarSection} setAIFeature={setAIFeature} />
+        <MainSection noteData={noteData} setNoteData={setNoteData} saveNote={saveNote} setSidebarSection={setSidebarSection} setNoteInformation={setNoteInformation} setAIFeature={setAIFeature} />
       </main>
     </>
   );

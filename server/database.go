@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Ara-O/Minim-React/utils"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -14,20 +15,18 @@ type DatabaseInterface interface {
 	end()
 	register(http.ResponseWriter, *http.Request)
 	login(http.ResponseWriter, *http.Request)
+	saveNote(http.ResponseWriter, *http.Request)
 }
 
 type Database struct {
 	db *sql.DB
 }
 
-func createTables() string {
-	return `CREATE TABLE IF NOT EXISTS User (
-		id INT PRIMARY KEY AUTO_INCREMENT,
-		username VARCHAR(255),
-		email VARCHAR(255),
-		password VARCHAR(255)
-	)`
-}
+// LastUpdated int    `json:"last_updated"`
+// NoteData    string `json:"note_data"`
+// NoteId      string `json:"note_id"`
+// NoteSnippet string `json:"note_snippet"`
+// NoteTitle   string `json:"note_title"`
 
 func (d *Database) start() error {
 	fmt.Println("Starting database...")
@@ -41,9 +40,11 @@ func (d *Database) start() error {
 	d.db = db
 
 	// Creating table
-	row, err := db.Query(createTables())
-	row.Close()
-
+	_, err = db.Exec(utils.CreateUserTable())
+	if err != nil {
+		return err
+	}
+	_, err = db.Exec(utils.CreateNoteTable())
 	if err != nil {
 		return err
 	}
