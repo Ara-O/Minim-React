@@ -4,6 +4,7 @@ import Button from "./Button";
 import PencilIcon from "../../assets/pencil-icon.png";
 import { Note } from "../../types/types";
 import { ChangeEvent } from "react"
+import parseNoteInformation from "../../utils/parseNoteInformation";
 
 interface Props {
     noteData: Note,
@@ -90,7 +91,7 @@ export default function main({ noteData, setNoteData, setSidebarSection, setAIFe
                     }}
                     onChange={(_, editor) => {
                         // @ts-ignore
-                        setNoteInformation(editor.getData());
+                        setNoteData({ ...noteData, note_data: editor.getData(), note_snippet: parseNoteInformation(editor.getData().slice(0, 96)) });
                     }}
                     // onBlur={(_, editor) => {}}
                     onFocus={(_, editor) => {

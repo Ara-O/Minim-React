@@ -46,7 +46,7 @@ func (d *Database) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = d.db.QueryRow("SELECT * FROM User WHERE email = ?", user.Email).Scan(&userFromDatabase.Id, &userFromDatabase.Username, &userFromDatabase.Email, &userFromDatabase.Password)
+	err = d.db.QueryRow("SELECT * FROM Users WHERE email = ?", user.Email).Scan(&userFromDatabase.Id, &userFromDatabase.Username, &userFromDatabase.Email, &userFromDatabase.Password)
 
 	if err != nil {
 		w.WriteHeader(404)

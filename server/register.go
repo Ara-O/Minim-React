@@ -48,7 +48,7 @@ func (d *Database) register(w http.ResponseWriter, r *http.Request) {
 
 	var existingUser models.RegisteredUserData
 	//Check if user already exists
-	row := d.db.QueryRow("SELECT * FROM User WHERE email = ?", user.EmailAddress)
+	row := d.db.QueryRow("SELECT * FROM Users WHERE email = ?", user.EmailAddress)
 	if err := row.Scan(&existingUser.Id, &existingUser.Username, &existingUser.Email, &existingUser.Password); err == nil {
 		w.WriteHeader(409)
 		fmt.Println("A user already exists")
@@ -60,14 +60,14 @@ func (d *Database) register(w http.ResponseWriter, r *http.Request) {
 	pw_hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
 	stmt, err := d.db.Prepare("INSERT INTO User(username, email, password) VALUES(?, ?, ?)")
 	result, err := stmt.Exec(user.Username, user.EmailAddress, pw_hash)
 
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	defer stmt.Close()
 

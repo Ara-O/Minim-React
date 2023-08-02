@@ -57,12 +57,12 @@ export default function Home() {
   }
 
   async function saveNote() {
-    setNoteData({ ...noteData, note_data: noteInformation, last_updated: Date.now(), note_snippet: parseNoteInformation(noteInformation.slice(0, 96)) })
+    console.log(noteData)
     try {
       await axios.post("http://localhost:8080/api/saveNote", noteData);
-      await loadAllNotes();
-    } catch (err) {
-      console.error(err);
+      // await loadAllNotes();
+    } catch (err: any) {
+      alert(err.response.data);
     }
   }
 

@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -28,14 +28,14 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 		decodedToken, _, err := new(jwt.Parser).ParseUnverified(token, jwt.MapClaims{})
 		if err != nil {
-			log.Fatal("Error parsing token:", err)
+			fmt.Println("Error parsing token:", err)
 			return
 		}
 
 		// Access the claims data
 		claims, ok := decodedToken.Claims.(jwt.MapClaims)
 		if !ok {
-			log.Fatal("Error accessing claims")
+			fmt.Println("Error accessing claims")
 			return
 		}
 
