@@ -99,5 +99,6 @@ export default function main({ noteData, setNoteData, setSidebarSection, setAIFe
                     }}
                 />
             </div>
-        </section>)
+        </section>
+    )
 }

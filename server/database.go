@@ -16,17 +16,12 @@ type DatabaseInterface interface {
 	register(http.ResponseWriter, *http.Request)
 	login(http.ResponseWriter, *http.Request)
 	saveNote(http.ResponseWriter, *http.Request)
+	loadNotes(http.ResponseWriter, *http.Request)
 }
 
 type Database struct {
 	db *sql.DB
 }
-
-// LastUpdated int    `json:"last_updated"`
-// NoteData    string `json:"note_data"`
-// NoteId      string `json:"note_id"`
-// NoteSnippet string `json:"note_snippet"`
-// NoteTitle   string `json:"note_title"`
 
 func (d *Database) start() error {
 	fmt.Println("Starting database...")

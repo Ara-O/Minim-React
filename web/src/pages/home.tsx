@@ -26,33 +26,28 @@ export default function Home() {
   });
 
   async function deleteNote(note_id: string) {
-    try {
-      await axios.get("http://localhost:8080/api/deleteNote", {
-        params: { note_id },
-      });
-      await loadAllNotes();
-      alert("Note deleted successfully");
-    } catch (err) {
-      console.error(err);
-    }
+    // try {
+    //   await axios.get("http://localhost:8080/api/deleteNote", {
+    //     params: { note_id },
+    //   });
+    //   await loadAllNotes();
+    //   alert("Note deleted successfully");
+    // } catch (err) {
+    //   console.error(err);
+    // }
   }
 
 
   async function loadAllNotes() {
     try {
+      console.log("loading all notes")
       let notes = await axios.get(
-        "http://localhost:8080/api/loadAllNotes"
+        "http://localhost:8080/api/loadNotes"
       );
-      setAllNotes(notes.data.notes);
+      console.log("ntoes", notes)
+      //   // setAllNotes(notes.data.notes);
     } catch (err: any) {
-      console.error(err);
-      if (err.response.status === 401) {
-        //If JWT is expired, clear the token and go back to signup page
-        localStorage.setItem("token", "");
-        navigate("/");
-      } else {
-        alert(err)
-      }
+      console.log(err)
     }
   }
 
@@ -99,7 +94,10 @@ export default function Home() {
   }
 
   useEffect(() => {
-    loadAllNotes();
+    loadAllNotes()
+    // console.log("reeeeeeeeeee")
+    // return () => console.log('reeee')
+    // return () => loadAllNotes();
   }, []);
 
 

@@ -33,6 +33,7 @@ func (s *Server) start() error {
 	http.HandleFunc("/api/register", s.database.register)
 	http.HandleFunc("/api/login", s.database.login)
 	http.HandleFunc("/api/saveNote", middleware.AuthMiddleware(s.database.saveNote))
+	http.HandleFunc("/api/loadNotes", middleware.AuthMiddleware(s.database.loadNotes))
 	fmt.Println("Server started on", s.listenAddr)
 	err = http.ListenAndServe(s.listenAddr, nil)
 
