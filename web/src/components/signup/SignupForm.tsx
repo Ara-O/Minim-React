@@ -36,8 +36,8 @@ export default function SignupForm() {
         .then((res) => {
           console.log(res);
           localStorage.setItem("token", res.data);
-          axios.defaults.headers.common["authorization"] =
-            localStorage.getItem("token");
+          axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`
+
           navigate("/home");
         })
         .catch((err) => {

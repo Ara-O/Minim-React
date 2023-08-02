@@ -28,7 +28,7 @@ export default function LoginForm() {
       .then((res) => {
         console.log(res)
         localStorage.setItem("token", res.data);
-        axios.defaults.headers.common["authorization"] =
+        axios.defaults.headers.common["Authorization"] =
           localStorage.getItem("token");
         navigate("/home");
       })

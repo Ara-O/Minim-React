@@ -5,6 +5,12 @@ import "./index.css";
 import Signup from "./pages/signup.tsx";
 import Login from "./pages/login.tsx";
 import Home from "./pages/home.tsx";
+import axios from "axios";
+
+if (localStorage.getItem("token")) {
+  axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`
+
+}
 
 const router = createBrowserRouter([
   {

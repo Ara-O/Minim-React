@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/Ara-O/Minim-React/middleware"
 )
 
 type Server struct {
@@ -30,7 +32,7 @@ func (s *Server) start() error {
 	http.HandleFunc("/health", health)
 	http.HandleFunc("/api/register", s.database.register)
 	http.HandleFunc("/api/login", s.database.login)
-	http.HandleFunc("/api/saveNote", s.database.saveNote)
+	http.HandleFunc("/api/saveNote", middleware.AuthMiddleware(s.database.saveNote))
 	fmt.Println("Server started on", s.listenAddr)
 	err = http.ListenAndServe(s.listenAddr, nil)
 

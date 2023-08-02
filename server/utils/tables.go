@@ -13,7 +13,7 @@ func CreateUserTable() string {
 func CreateNoteTable() string {
 	return `CREATE TABLE IF NOT EXISTS Notes (
 		userId INT,
-		lastUpdated INT,
+		lastUpdated BIGINT,
 		noteData TEXT,
 		noteId VARCHAR(255),
 		noteSnippet VARCHAR(100),

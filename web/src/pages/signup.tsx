@@ -9,8 +9,7 @@ export default function Signup() {
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      axios.defaults.headers.common["authorization"] =
-        localStorage.getItem("token");
+      axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`
       navigate("/home");
     } else {
       console.log("User isn't logged in yet")
