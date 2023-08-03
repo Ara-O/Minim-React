@@ -7,7 +7,6 @@ import generateRandomId from "../utils/generateRandomID";
 import axios from "axios";
 import AIFeatures from "../components/home/AIFeatures";
 import MainSection from "../components/home/MainSection"
-import parseNoteInformation from "../utils/parseNoteInformation";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -17,6 +16,7 @@ export default function Home() {
   let [noteInformation, setNoteInformation] = useState<string>("");
   let [sidebarSection, setSidebarSection] = useState<SidebarSection>("Notes");
   let [AIFeature, setAIFeature] = useState<AIFeature>("");
+
   let [noteData, setNoteData] = useState<Note>({
     note_title: "Note Title",
     note_id: generateRandomId(),
@@ -43,8 +43,10 @@ export default function Home() {
       let notes = await axios.get(
         "http://localhost:8080/api/loadNotes"
       );
-      console.log("ntoes", notes)
-      //   // setAllNotes(notes.data.notes);
+      console.log("Notes:", notes)
+      if (notes.data != null) {
+        setAllNotes(notes.data);
+      }
     } catch (err: any) {
       console.log(err)
       alert(err.response.data)
@@ -55,7 +57,7 @@ export default function Home() {
     console.log(noteData)
     try {
       await axios.post("http://localhost:8080/api/saveNote", noteData);
-      // await loadAllNotes();
+      await loadAllNotes();
     } catch (err: any) {
       alert(err.response.data);
     }
@@ -83,11 +85,11 @@ export default function Home() {
   }
 
   function addNote() {
-    setNoteInformation("");
+    console.log('Adding note')
     setNoteData({
       note_title: "Note title",
       note_id: generateRandomId(),
-      note_snippet: "This is a note snippet. Feature incoming soon.",
+      note_snippet: "This is a note snippet :)",
       note_data: "<p>You can start taking notes here :D </p>",
       last_updated: Date.now(),
     });
