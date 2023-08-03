@@ -40,7 +40,6 @@ export default function Home() {
 
   async function loadAllNotes() {
     try {
-      console.log("loading all notes")
       let notes = await axios.get(
         "http://localhost:8080/api/loadNotes"
       );
@@ -48,6 +47,7 @@ export default function Home() {
       //   // setAllNotes(notes.data.notes);
     } catch (err: any) {
       console.log(err)
+      alert(err.response.data)
     }
   }
 
@@ -94,10 +94,11 @@ export default function Home() {
   }
 
   useEffect(() => {
-    loadAllNotes()
-    // console.log("reeeeeeeeeee")
-    // return () => console.log('reeee')
-    // return () => loadAllNotes();
+    if (localStorage.getItem("token")?.trim() === "" || localStorage.getItem("token") === null) {
+      navigate("/")
+    } else {
+      loadAllNotes()
+    }
   }, []);
 
 

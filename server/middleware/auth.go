@@ -19,6 +19,11 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 		authToken := r.Header.Get("Authorization")
 
+		if authToken == "" {
+			http.Error(w, "No valid auth token", http.StatusNotFound)
+			return
+		}
+
 		token := strings.Split(authToken, " ")[1]
 
 		if strings.TrimSpace(token) == "" {
@@ -29,6 +34,7 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		decodedToken, _, err := new(jwt.Parser).ParseUnverified(token, jwt.MapClaims{})
 		if err != nil {
 			fmt.Println("Error parsing token:", err)
+			http.Error(w, "Error parsing token", http.StatusNotFound)
 			return
 		}
 
