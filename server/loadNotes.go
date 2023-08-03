@@ -33,17 +33,16 @@ func (db *Database) loadNotes(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "There was an error retrieving your notes", http.StatusInternalServerError)
 		}
 
-		notes = append(notes)
+		notes = append(notes, note)
 	}
-
-	test, err := json.Marshal(notes)
 
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	jsonNotes, err := json.Marshal(notes)
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
-
-	fmt.Println(test)
-	w.Write(test)
+	w.Write(jsonNotes)
 }
