@@ -21,7 +21,7 @@ func (db *Database) loadNotes(w http.ResponseWriter, r *http.Request) {
 	userId := r.Context().Value("id")
 	fmt.Println(userId)
 
-	rows, err := db.db.Query("SELECT lastUpdated, noteData, noteId, noteSnippet, noteTitle FROM Notes WHERE userId = ?", userId)
+	rows, err := db.db.Query("SELECT lastUpdated, noteData, noteId, noteSnippet, noteTitle FROM Notes WHERE userId = ? ORDER BY lastUpdated DESC", userId)
 	if err != nil {
 		http.Error(w, "There was an error fetching notes", http.StatusBadRequest)
 	}

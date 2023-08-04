@@ -49,12 +49,15 @@ export default function Home() {
       }
     } catch (err: any) {
       console.log(err)
-      alert(err.response.data)
+      if (err.code === "ERR_NETWORK") {
+        alert("Network error")
+      } else {
+        alert(err.response.data)
+      }
     }
   }
 
   async function saveNote() {
-    console.log(noteData)
     try {
       await axios.post("http://localhost:8080/api/saveNote", noteData);
       await loadAllNotes();
@@ -64,35 +67,32 @@ export default function Home() {
   }
 
   async function editNote(note_id: string) {
-    try {
-      let note = await axios.get(
-        "http://localhost:8080/api/retrieveNote",
-        {
-          params: { note_id },
-        }
-      );
+    let note = allNotes.find((note) => note.note_id === note_id)
 
-      setNoteData({
-        note_id: note.data.note_id,
-        note_data: note.data.note_data,
-        note_snippet: note.data.note_snippet,
-        note_title: note.data.note_title,
-        last_updated: note.data.last_updated,
-      });
-    } catch (err) {
-      console.error(err);
+    if (note != undefined) {
+      setNoteData(note)
+      noteData.note_title = note.note_title
+      noteData.note_id = note.note_id
+      noteData.note_snippet = note.note_snippet
+      noteData.note_data = note.note_data
+      noteData.last_updated = Date.now()
     }
   }
 
   function addNote() {
-    console.log('Adding note')
     setNoteData({
-      note_title: "Note title",
+      note_title: "Note Title",
       note_id: generateRandomId(),
       note_snippet: "This is a note snippet :)",
       note_data: "<p>You can start taking notes here :D </p>",
       last_updated: Date.now(),
     });
+
+    noteData.note_title = "Note Title"
+    noteData.note_id = generateRandomId()
+    noteData.note_snippet = "This is a note snippet :)"
+    noteData.note_data = "<p>You can start taking notes here :D </p>"
+    noteData.last_updated = Date.now()
   }
 
   useEffect(() => {

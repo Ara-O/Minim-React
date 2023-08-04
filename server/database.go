@@ -32,6 +32,11 @@ func (d *Database) start() error {
 		return err
 	}
 
+	//Recommended settings
+	db.SetConnMaxLifetime(time.Minute * 3)
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(10)
+
 	d.db = db
 
 	// Creating table
@@ -45,11 +50,6 @@ func (d *Database) start() error {
 	}
 
 	fmt.Println("Table was created")
-
-	//Recommended settings
-	db.SetConnMaxLifetime(time.Minute * 3)
-	db.SetMaxOpenConns(10)
-	db.SetMaxIdleConns(10)
 
 	if err != nil {
 		return err

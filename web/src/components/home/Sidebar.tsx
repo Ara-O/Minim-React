@@ -12,25 +12,15 @@ interface Props {
   onDeleteNote: any;
 }
 
-let mockNotes: Note[] = [
-  {
-    note_data: "",
-    note_id: "JKBoiuBUO",
-    note_snippet: "This is a snippet, pls ignore",
-    note_title: "Note title",
-    last_updated: 324322342,
-  },
-  {
-    note_data: "",
-    note_id: "JEWFjkO",
-    note_snippet: "This is a snippet, pls ignore",
-    note_title: "Note title 2",
-    last_updated: 324322342,
-  },
-];
 
 const Sidebar = ({ allNotes, onEditNote, onDeleteNote, onAddNote }: Props) => {
   const navigate = useNavigate()
+  const [searchInput, setSearchInput] = useState("")
+  const filteredNotes = allNotes.filter((note) => note.note_title.toLowerCase().includes(searchInput.toLowerCase().trim()))
+  function handleSearchBarChange(e) {
+    setSearchInput(e.target.value)
+  }
+
   function editNote(note_id: string) {
     console.log("editing note", note_id);
     onEditNote(note_id);
@@ -61,14 +51,16 @@ const Sidebar = ({ allNotes, onEditNote, onDeleteNote, onAddNote }: Props) => {
         className={`${sideBarMinimized === true ? "sidebar-text-disappear" : ""
           } sidebar-notes`}
       >
-        <h3 className="font-medium text-[17px]">Welcome Ara</h3>
+        <h3 className="font-medium text-[17px]">Hello there</h3>
         <h4 className="mt-3 text-gray-300 font-medium text-[13px]">
           August 3, 2022
         </h4>
         <span className="relative">
           <input
             type="text"
+            value={searchInput}
             className="mt-5 rounded-[5px] outline-none pl-6 text-sm bg-minim-gray-a h-10 w-80"
+            onChange={handleSearchBarChange}
           />
           <img
             src={SearchIcon}
@@ -77,13 +69,13 @@ const Sidebar = ({ allNotes, onEditNote, onDeleteNote, onAddNote }: Props) => {
           />
         </span>
         <h4
-          className="mt-3 text-gray-300 font-medium text-[13px] underline cursor-pointer"
+          className="mt-5 text-gray-300 font-medium text-[13px] underline cursor-pointer"
           onClick={onAddNote}
         >
           Add Note
         </h4>
         <div className="mt-5 flex flex-col gap-5 sidebar-notes-list">
-          {allNotes.map((note) => {
+          {filteredNotes.map((note) => {
             return (
               <Notes
                 note={note}
@@ -92,17 +84,7 @@ const Sidebar = ({ allNotes, onEditNote, onDeleteNote, onAddNote }: Props) => {
                 deleteNote={() => deleteNote(note.note_id)}
               />
             );
-          }) ||
-            mockNotes.map((note) => {
-              return (
-                <Notes
-                  note={note}
-                  key={note.note_id}
-                  editNote={() => editNote(note.note_id)}
-                  deleteNote={() => deleteNote(note.note_id)}
-                />
-              );
-            })}
+          })}
         </div>
         <h3 onClick={logOut} className="absolute cursor-pointer text-sm bottom-10 hover:underline font-light">Log Out</h3>
       </div>
