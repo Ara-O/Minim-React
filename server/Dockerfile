@@ -18,5 +18,5 @@ RUN go build -o mainapp
 
 EXPOSE 8080
 
-CMD ["mainapp"]
+CMD ["./mainapp"]
 
