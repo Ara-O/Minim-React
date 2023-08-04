@@ -12,10 +12,9 @@ interface Props {
     setAIFeature: any
     setNoteData: any
     saveNote: any
-    setNoteInformation: any
 }
 
-export default function main({ noteData, setNoteData, setSidebarSection, setAIFeature, saveNote, setNoteInformation }: Props) {
+export default function main({ noteData, setNoteData, setSidebarSection, setAIFeature, saveNote }: Props) {
     function handleTitleChange(e: ChangeEvent<HTMLInputElement>) {
         setNoteData({ ...noteData, note_title: e.target.value });
     }

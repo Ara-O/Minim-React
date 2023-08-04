@@ -123,7 +123,7 @@ export default function Home() {
           />
         )}
         {/* RIGHT SECTION */}
-        <MainSection noteData={noteData} setNoteData={setNoteData} saveNote={saveNote} setSidebarSection={setSidebarSection} setNoteInformation={setNoteInformation} setAIFeature={setAIFeature} />
+        <MainSection noteData={noteData} setNoteData={setNoteData} saveNote={saveNote} setSidebarSection={setSidebarSection} setAIFeature={setAIFeature} />
       </main>
     </>
   );
