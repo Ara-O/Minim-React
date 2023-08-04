@@ -13,7 +13,6 @@ export default function Home() {
 
   //Variables
   let [allNotes, setAllNotes] = useState<Note[]>([]);
-  let [noteInformation, setNoteInformation] = useState<string>("");
   let [sidebarSection, setSidebarSection] = useState<SidebarSection>("Notes");
   let [AIFeature, setAIFeature] = useState<AIFeature>("");
 
@@ -26,15 +25,26 @@ export default function Home() {
   });
 
   async function deleteNote(note_id: string) {
-    // try {
-    //   await axios.get("http://localhost:8080/api/deleteNote", {
-    //     params: { note_id },
-    //   });
-    //   await loadAllNotes();
-    //   alert("Note deleted successfully");
-    // } catch (err) {
-    //   console.error(err);
-    // }
+    try {
+      await axios.post("http://localhost:8080/api/deleteNote", { note_id });
+      await loadAllNotes();
+      setNoteData({
+        note_title: "Note Title",
+        note_id: generateRandomId(),
+        note_snippet: "This is a note snippet.",
+        note_data: "<p>You can start taking notes here :D </p>",
+        last_updated: Date.now(),
+      })
+
+      noteData.note_title = "Note Title"
+      noteData.note_id = generateRandomId()
+      noteData.note_snippet = "This is a note snippet."
+      noteData.note_data = "<p>You can start taking notes here :D </p>"
+      noteData.last_updated = Date.now()
+
+    } catch (err: any) {
+      alert(err?.respone?.message || "Error");
+    }
   }
 
 
@@ -60,6 +70,7 @@ export default function Home() {
   async function saveNote() {
     try {
       await axios.post("http://localhost:8080/api/saveNote", noteData);
+      setNoteData({ ...noteData, last_updated: Date.now() })
       await loadAllNotes();
     } catch (err: any) {
       alert(err.response.data);
@@ -118,7 +129,7 @@ export default function Home() {
         ) : (
           <AIFeatures
             feature={AIFeature}
-            noteInformation={noteInformation}
+            noteData={noteData.note_data}
             returnToNotes={() => setSidebarSection("Notes")}
           />
         )}

@@ -8,3 +8,5 @@ require (
 	github.com/joho/godotenv v1.5.1
 	golang.org/x/crypto v0.11.0
 )
+
+require github.com/sashabaranov/go-openai v1.14.1 // indirect

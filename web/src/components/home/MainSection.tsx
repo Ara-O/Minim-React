@@ -46,7 +46,7 @@ export default function main({ noteData, setNoteData, setSidebarSection, setAIFe
                     >
                         Generate idea visualization
                     </Button>
-                    <Button
+                    {/* <Button
                         onclick={() => {
                             setSidebarSection("AI");
                             setAIFeature("Generate Test Questions");
@@ -61,7 +61,7 @@ export default function main({ noteData, setNoteData, setSidebarSection, setAIFe
                         }}
                     >
                         Summarize notes
-                    </Button>
+                    </Button> */}
                 </div>
             </div>
             <div className="bg-black h-full overflow-auto w-full notes-area px-20 py-12">

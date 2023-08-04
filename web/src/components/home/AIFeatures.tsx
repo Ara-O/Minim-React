@@ -3,47 +3,52 @@ import { useEffect, useState } from "react";
 import { AIFeature } from "../../types/types";
 import axios from "axios";
 import BoxedButton from "./BoxedButton";
-
 interface Props {
   feature: AIFeature;
-  noteInformation: string;
+  noteData: string;
   returnToNotes: any;
 }
-const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
+const AIFeatures = ({ feature, noteData, returnToNotes }: Props) => {
   let [summarizedNote, setSummarizedNote] = useState<string>("");
   let [testQuestions, setTestQuestions] = useState("");
   const parser = new DOMParser();
-  const plainText = parser.parseFromString(noteInformation, "text/html")
+  const plainText = parser.parseFromString(noteData, "text/html")
     .documentElement.textContent;
 
   function generateSummary() {
     setSummarizedNote("");
     axios
-      .post("https://minim-km35.onrender.com/api/summarizeNote", {
+      .post("http://localhost:8080/api/generateNoteSummary", {
         noteData: plainText,
       })
       .then((res) => {
         console.log(res.data);
-        setSummarizedNote(res.data.summary);
+        // setSummarizedNote(res.data.summary);
       })
       .catch((err) => {
         console.error(err);
-        alert(err.response.data.message);
+        // alert(err.response.data.message);
       });
   }
 
   function generateTestQuestions() {
     setTestQuestions("");
+
+    // if (plainText && plainText?.length < 200) {
+    // alert("More input is needed to generate questions")
+    // }
+    console.log(plainText)
     axios
-      .post("https://minim-km35.onrender.com/api/generateTestQuestions", {
+      .post("http://localhost:8080/api/generateTestQuestions", {
         noteData: plainText,
       })
       .then((res) => {
-        setTestQuestions(res.data.testQuestions);
+        console.log(res)
+        // setTestQuestions(res.data.testQuestions);
       })
       .catch((err) => {
         console.error(err);
-        alert(err.response.data.message);
+        // alert(err.response.data.message);
       });
   }
 
@@ -57,13 +62,15 @@ const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
   }
 
   function generateVisualization() {
+    setIdeaImage([])
     setLoadingMessage("Loading images...");
     axios
-      .post("https://minim-km35.onrender.com/api/generateIdeaVisualization", {
+      .post("http://localhost:8080/api/generateIdeaVisualization", {
         ideaToVisualize,
       })
       .then((res) => {
-        setIdeaImage(res.data.urls);
+        console.log(res)
+        setIdeaImage(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -78,7 +85,7 @@ const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
     if (feature === "Generate Test Questions") {
       generateTestQuestions();
     }
-  }, [feature]);
+  }, []);
 
   return (
     <section
@@ -137,9 +144,11 @@ const AIFeatures = ({ feature, noteInformation, returnToNotes }: Props) => {
                 </div>
               </>
             ) : (
-              <h3 className="font-light text-sm mt-3">
-                Generating test questions..
-              </h3>
+              <>
+                <h3 className="font-light text-sm mt-3">
+                  Generating test questions..
+                </h3>
+              </>
             )}
           </section>
         )}

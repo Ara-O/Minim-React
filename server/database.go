@@ -17,6 +17,10 @@ type DatabaseInterface interface {
 	login(http.ResponseWriter, *http.Request)
 	saveNote(http.ResponseWriter, *http.Request)
 	loadNotes(http.ResponseWriter, *http.Request)
+	deleteNote(http.ResponseWriter, *http.Request)
+	generateIdeaVisualization(http.ResponseWriter, *http.Request)
+	generateTestQuestions(http.ResponseWriter, *http.Request)
+	generateNoteSummary(http.ResponseWriter, *http.Request)
 }
 
 type Database struct {

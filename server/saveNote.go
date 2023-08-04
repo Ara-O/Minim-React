@@ -24,8 +24,6 @@ func (db *Database) saveNote(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	fmt.Println("Note: ", note)
-
 	if strings.TrimSpace(note.NoteTitle) == "" {
 		http.Error(w, "A note title is necessary", http.StatusBadRequest)
 		return
@@ -43,11 +41,10 @@ func (db *Database) saveNote(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("There has been an error preparing notes", err)
 	}
 
-	result, err := stmt.Exec(id, note.LastUpdated, note.NoteData, note.NoteId, note.NoteSnippet, note.NoteTitle)
+	_, err = stmt.Exec(id, note.LastUpdated, note.NoteData, note.NoteId, note.NoteSnippet, note.NoteTitle)
 
 	if err != nil {
 		fmt.Println("Error executing prepared stmt: ", err)
 	}
 
-	fmt.Println(result)
 }

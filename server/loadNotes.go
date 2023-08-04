@@ -19,7 +19,6 @@ func (db *Database) loadNotes(w http.ResponseWriter, r *http.Request) {
 	var notes []models.Note
 
 	userId := r.Context().Value("id")
-	fmt.Println(userId)
 
 	rows, err := db.db.Query("SELECT lastUpdated, noteData, noteId, noteSnippet, noteTitle FROM Notes WHERE userId = ? ORDER BY lastUpdated DESC", userId)
 	if err != nil {
