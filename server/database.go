@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/Ara-O/Minim-React/utils"
 	_ "github.com/go-sql-driver/mysql"
@@ -41,7 +40,7 @@ func (d *Database) start() error {
 	}
 
 	//Recommended settings
-	db.SetConnMaxLifetime(time.Minute * 3)
+	// db.SetConnMaxLifetime(time.Minute * 3)
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(10)
 
