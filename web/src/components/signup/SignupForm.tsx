@@ -43,7 +43,11 @@ export default function SignupForm() {
         .catch((err) => {
           console.log(err)
           setProgressMessage("")
-          setErrorMessage(err.name);
+          if (err?.response) {
+            setErrorMessage(err.response.data);
+          } else {
+            setErrorMessage(err.name);
+          }
         });
 
     }

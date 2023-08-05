@@ -28,13 +28,16 @@ export default function LoginForm() {
       .then((res) => {
         console.log(res)
         localStorage.setItem("token", res.data);
-        axios.defaults.headers.common["Authorization"] =
-          localStorage.getItem("token");
+        axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`
         navigate("/home");
       })
       .catch((err) => {
         setProgressMessage("")
-        setErrorMessage(err.response.data)
+        if (err?.response) {
+          setErrorMessage(err.response.data)
+        } else {
+          setErrorMessage(err.name)
+        }
       });
   }
 
