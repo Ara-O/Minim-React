@@ -24,7 +24,7 @@ export default function LoginForm() {
     setProgressMessage("Logging in...")
     setErrorMessage("")
     axios
-      .post("https://minim-react.onrender.com/api/login", userData)
+      .post("https://minim-3py4.onrender.com/api/login", userData)
       .then((res) => {
         console.log(res)
         localStorage.setItem("token", res.data);

@@ -18,7 +18,7 @@ const AIFeatures = ({ feature, noteData, returnToNotes }: Props) => {
   function generateSummary() {
     setSummarizedNote("");
     axios
-      .post("https://minim-react.onrender.com/api/generateNoteSummary", {
+      .post("https://minim-3py4.onrender.com/api/generateNoteSummary", {
         noteData: plainText,
       })
       .then((res) => {
@@ -39,7 +39,7 @@ const AIFeatures = ({ feature, noteData, returnToNotes }: Props) => {
     // }
     console.log(plainText)
     axios
-      .post("https://minim-react.onrender.com/api/generateTestQuestions", {
+      .post("https://minim-3py4.onrender.com/api/generateTestQuestions", {
         noteData: plainText,
       })
       .then((res) => {
@@ -65,7 +65,7 @@ const AIFeatures = ({ feature, noteData, returnToNotes }: Props) => {
     setIdeaImage([])
     setLoadingMessage("Loading images...");
     axios
-      .post("https://minim-react.onrender.com/api/generateIdeaVisualization", {
+      .post("https://minim-3py4.onrender.com/api/generateIdeaVisualization", {
         ideaToVisualize,
       })
       .then((res) => {

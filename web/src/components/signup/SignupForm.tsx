@@ -32,7 +32,7 @@ export default function SignupForm() {
       setErrorMessage("")
       setProgressMessage("Registering...")
       axios
-        .post("https://minim-react.onrender.com/api/register", userData)
+        .post("https://minim-3py4.onrender.com/api/register", userData)
         .then((res) => {
           console.log(res);
           localStorage.setItem("token", res.data);
