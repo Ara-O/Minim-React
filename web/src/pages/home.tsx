@@ -26,7 +26,7 @@ export default function Home() {
 
   async function deleteNote(note_id: string) {
     try {
-      await axios.post("http://localhost:8080/api/deleteNote", { note_id });
+      await axios.post("https://minim-react.onrender.com/api/deleteNote", { note_id });
       await loadAllNotes();
       setNoteData({
         note_title: "Note Title",
@@ -51,7 +51,7 @@ export default function Home() {
   async function loadAllNotes() {
     try {
       let notes = await axios.get(
-        "http://localhost:8080/api/loadNotes"
+        "https://minim-react.onrender.com/api/loadNotes"
       );
       console.log("Notes:", notes)
       if (notes.data != null) {
@@ -69,7 +69,7 @@ export default function Home() {
 
   async function saveNote() {
     try {
-      await axios.post("http://localhost:8080/api/saveNote", noteData);
+      await axios.post("https://minim-react.onrender.com/api/saveNote", noteData);
       setNoteData({ ...noteData, last_updated: Date.now() })
       await loadAllNotes();
     } catch (err: any) {
