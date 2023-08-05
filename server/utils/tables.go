@@ -17,7 +17,6 @@ func CreateNoteTable() string {
 		noteData TEXT,
 		noteId VARCHAR(255) PRIMARY KEY,
 		noteSnippet VARCHAR(100),
-		noteTitle VARCHAR(255),
-		FOREIGN KEY (userId) REFERENCES User(id)
+		noteTitle VARCHAR(255)
 	);`
 }

@@ -41,9 +41,9 @@ export default function SignupForm() {
           navigate("/home");
         })
         .catch((err) => {
-          console.log(err.response)
+          console.log(err)
           setProgressMessage("")
-          setErrorMessage(err.response.data);
+          setErrorMessage(err.name);
         });
 
     }

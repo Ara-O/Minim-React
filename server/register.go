@@ -60,14 +60,23 @@ func (d *Database) register(w http.ResponseWriter, r *http.Request) {
 	pw_hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error 1", err)
 	}
 
-	stmt, err := d.db.Prepare("INSERT INTO User(username, email, password) VALUES(?, ?, ?)")
+	stmt, err := d.db.Prepare("INSERT INTO Users(username, email, password) VALUES(?, ?, ?)")
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, "There was an error creating an account", http.StatusInternalServerError)
+		return
+	}
+
+	defer stmt.Close()
+
 	result, err := stmt.Exec(user.Username, user.EmailAddress, pw_hash)
 
 	if err != nil {
-		fmt.Println(err)
+		http.Error(w, "There was an error creating an account", http.StatusInternalServerError)
+		return
 	}
 	defer stmt.Close()
 
@@ -82,7 +91,7 @@ func (d *Database) register(w http.ResponseWriter, r *http.Request) {
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 
 	if err != nil {
-		log.Fatal("e", err)
+		fmt.Println("Cannot access token")
 	}
 
 	//Sending the token sring
