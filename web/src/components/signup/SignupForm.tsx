@@ -17,10 +17,10 @@ export default function SignupForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [progressMessage, setProgressMessage] = useState("");
   const [userData, setUserData] = useState<UserData>({
-    username: "Ara",
-    emailAddress: "test@gmail.com",
-    password: "test",
-    passwordConfirmation: "test",
+    username: "",
+    emailAddress: "",
+    password: "",
+    passwordConfirmation: "",
   });
 
   function createAccount(e: FormEvent<HTMLFormElement>) {

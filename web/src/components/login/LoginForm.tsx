@@ -15,8 +15,8 @@ export default function LoginForm() {
   let [errorMessage, setErrorMessage] = useState<string>("")
   let [progressMessage, setProgressMessage] = useState<string>("")
   let [userData, setUserData] = useState<UserData>({
-    email: "test@gmail.com",
-    password: "test",
+    email: "",
+    password: "",
   });
 
   function logIn(e: FormEvent<HTMLFormElement>) {
