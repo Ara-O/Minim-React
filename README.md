@@ -1,3 +1,3 @@
 # Minim, a minimalistic note-taking software
 
-Still in development 🧹
+A simple note-taking app built with React, Go, and MySQL. 📓
