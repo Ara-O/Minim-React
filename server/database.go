@@ -4,10 +4,12 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/Ara-O/Minim-React/utils"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 )
 
 type DatabaseInterface interface {
@@ -28,9 +30,11 @@ type Database struct {
 }
 
 func (d *Database) start() error {
+	godotenv.Load()
 	fmt.Println("Starting database...")
 
-	db, err := sql.Open("mysql", "root:password@tcp(localhost)/test")
+	key := os.Getenv("MYSQL_CONNECTION_STRING")
+	db, err := sql.Open("mysql", key)
 
 	if err != nil {
 		return err
